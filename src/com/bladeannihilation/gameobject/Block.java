@@ -15,7 +15,7 @@ public class Block {
    public int getY() {
       return y;
    }
-   public int getType() {
+   public Tile getType() {
       return type;
    }
 }
