@@ -1,10 +1,15 @@
 package com.bladeannihilation.keyboard;
 
 public enum KeyBindings {
-	FORWARD,
-	BACKWARD,
-	PAUSE,
-	LEFT,
+	UP,
+	DOWN,
 	RIGHT,
-	EXIT
+	LEFT,
+	ATTACK,
+	ABILITY_1,
+	ABIITY_2,
+	ABILITY_3,
+	ABILITY_4,
+	PAUSE,
+	EXIT,
 }

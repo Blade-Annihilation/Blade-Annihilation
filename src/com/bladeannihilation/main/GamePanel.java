@@ -15,8 +15,9 @@ import javax.swing.JPanel;
 
 import com.bladeannihilation.state.GameState;
 import com.bladeannihilation.state.GameStateManager;
+import com.bladeannihilation.keyboard.KeyboardHandler;
 
-public class GamePanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
+public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener {
 	/**
 	 * Serial UID randomly generated
 	 */
@@ -53,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 		GamePanel.HEIGHT = height;
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
+		addKeyListener(new KeyboardHandler());
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		gsm = new GameStateManager();
@@ -70,32 +72,22 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	public void beginRun() {
 		if(thread == null) {
 			running = true;
-			addKeyListener(this);
 			thread = new Thread(this);
 			thread.start();
 		}
 	}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+	/*public static GameState getGameState() {
+		return gs;
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+	public static boolean isGameActive() {
+		return gameRunning;
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		//if(e.getKeyCode() == KeyEvent.VK_L) {
-		//	limitFPS = true;
-		//}
-
-	}
+	public static GameStateManager getGSM() {
+		return gsm;
+	}*/
 
 	@Override
 	public void run() {
