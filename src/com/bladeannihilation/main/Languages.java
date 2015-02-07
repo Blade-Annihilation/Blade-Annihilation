@@ -10,6 +10,9 @@ public class Languages {
 	public static String PREFERENCES;
 	public static String QUIT;
 	public static String PAUSE;
+	public static String NEW_GAME;
+	public static String SAVE_RESTORE;
+	public static String BACK;
 	private static final String defaultLanguage = "en_us";
 
 	public static void initialize(String language) {
@@ -45,6 +48,12 @@ public class Languages {
 				QUIT = line;
 			} else if(header.equals("PAUSE")) {
 				PAUSE = line;
+			} else if(header.equals("NEW_GAME")) {
+				NEW_GAME = line;
+			} else if(header.equals("SAVE_RESTORE")) {
+				SAVE_RESTORE = line;
+			} else if(header.equals("BACK")) {
+				BACK = line;
 			}
 		}
 		s.close();

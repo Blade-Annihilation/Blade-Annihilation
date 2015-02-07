@@ -3,3 +3,6 @@ START Begin Game
 PREFERENCES Preferences
 QUIT Exit Game
 PAUSE Game paused.
+NEW_GAME Start new game
+SAVE_RESTORE Restore from save
+BACK Back
