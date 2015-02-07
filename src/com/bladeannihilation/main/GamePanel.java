@@ -15,16 +15,15 @@ import javax.swing.JPanel;
 
 import com.bladeannihilation.state.GameState;
 import com.bladeannihilation.state.GameStateManager;
-import com.bladeannihilation.keyboard.KeyboardHandler;
 
-public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener {
+public class GamePanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 	/**
 	 * Serial UID randomly generated
 	 */
 	private static final long serialVersionUID = 3599089849376471699L;
 
-	public static int WIDTH = 720;
-	public static int HEIGHT = 540;
+	public static int WIDTH = 640;
+	public static int HEIGHT = 480;
 	
 	public static Point mouseLocation = new Point(0, 0);
 	public static boolean mousePressed = false;
@@ -54,7 +53,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		GamePanel.HEIGHT = height;
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
-		addKeyListener(new KeyboardHandler());
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		gsm = new GameStateManager();
@@ -66,32 +64,38 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		g = (Graphics2D)buffer.getGraphics();
 		gsm.setGraphics(g);
 		videoMem = getGraphics();
-      if(gs == null) {
-		   gs = new GameState(g); //game state is loaded by this class instead of panel because it needs more speed
-      } else {
-         gs.setGraphics(g);
-      }
+		gs = new GameState(g); //game state is loaded by this class instead of panel because it needs more speed
 	}
 
 	public void beginRun() {
 		if(thread == null) {
 			running = true;
+			addKeyListener(this);
 			thread = new Thread(this);
 			thread.start();
 		}
 	}
 
-	/*public static GameState getGameState() {
-		return gs;
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public static boolean isGameActive() {
-		return gameRunning;
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public static GameStateManager getGSM() {
-		return gsm;
-	}*/
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		//if(e.getKeyCode() == KeyEvent.VK_L) {
+		//	limitFPS = true;
+		//}
+
+	}
 
 	@Override
 	public void run() {
