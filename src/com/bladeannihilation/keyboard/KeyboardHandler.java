@@ -1,18 +1,18 @@
 package com.bladeannihilation.keyboard;
 
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
-
-public class KeyboardHandler implements KeyListener {
-	private KeyBindings[] kb;
-	public void keyPressed(KeyEvent e) {
-		System.out.println("Press: " + e.getKeyCode());
+public class KeyboardHandler {
+	private static KeyReceivable[] events;
+	private static void addToReceivable(KeyReceivable kr) {
+		int len = events.length;
+		KeyReceivable[] buffer = new KeyReceivable[len+1];
+		for(int i = 0; i < events.length; i++) {
+			buffer[i] = events[i];
+		}
+		buffer[len] = kr;
+		events = buffer;
+		System.gc();
 	}
-	public void keyReleased(KeyEvent e) {
-		System.out.println("Release: " + e.getKeyCode());
+	public static void registerHandler(KeyReceivable kr) {
+		addToReceivable(kr);
 	}
-	public void keyTyped(KeyEvent e) {
-		System.out.println("Type: " + e.getKeyCode());
-	}
-
 }
