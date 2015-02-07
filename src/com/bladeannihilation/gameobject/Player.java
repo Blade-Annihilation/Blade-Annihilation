@@ -44,7 +44,7 @@ public class Player extends Entity {
 			if(!l.isFollowingPlayer()) {
 				l.followPlayer();
 			}
-			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && l.currentLevel.tileAt((int)(x-1), (int)(y+0.5)) == Tile.BREAKABLE) {
+			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && x >= 1 && l.currentLevel.tileAt((int)(x-1), (int)(y+0.5)) == Tile.BREAKABLE) {
 				l.currentLevel.replaceTileAt((int)(x-1), (int)(y+0.5), Tile.COBBLESTONE);
 			}
 		} else if(KeyBindings.keysPressed[KeyBindings.RIGHT]) {
@@ -60,7 +60,7 @@ public class Player extends Entity {
 			if(!l.isFollowingPlayer()) {
 				l.followPlayer();
 			}
-			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && l.currentLevel.tileAt((int)(x+1), (int)(y+0.5)) == Tile.BREAKABLE) {
+			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && x < l.currentLevel.getWidth()-1 && l.currentLevel.tileAt((int)(x+1), (int)(y+0.5)) == Tile.BREAKABLE) {
 				l.currentLevel.replaceTileAt((int)(x+1), (int)(y+0.5), Tile.COBBLESTONE);
 			}
 		} else {
@@ -82,7 +82,7 @@ public class Player extends Entity {
 				x = s.x;
 				y = s.y+1;
 			}
-			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && l.currentLevel.tileAt((int)(x+0.5), (int)(y+2)) == Tile.BREAKABLE) {
+			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && y < l.currentLevel.getHeight()-2 && l.currentLevel.tileAt((int)(x+0.5), (int)(y+2)) == Tile.BREAKABLE) {
 				l.currentLevel.replaceTileAt((int)(x+0.5), (int)(y+2), Tile.COBBLESTONE);
 			}
 		} else if(KeyBindings.keysPressed[KeyBindings.UP]) {
@@ -106,7 +106,7 @@ public class Player extends Entity {
 					l.currentLevel.loadLoc();
 				}
 			}
-			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && l.currentLevel.tileAt((int)(x+0.5), (int)(y-0.5)) == Tile.BREAKABLE) {
+			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && y >= 0.5 && l.currentLevel.tileAt((int)(x+0.5), (int)(y-0.5)) == Tile.BREAKABLE) {
 				l.currentLevel.replaceTileAt((int)(x+0.5), (int)(y-0.5), Tile.COBBLESTONE);
 			}
 		} else {
