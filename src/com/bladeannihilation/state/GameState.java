@@ -21,7 +21,7 @@ public class GameState implements Updateable {
 	private double x = 0;
 	private double y = 0;
 	private byte scrollTimer = 0;
-	public int gameScale = 16;
+	public static int gameScale = 16;
 	private Player p;
 	
 	public enum ScrollingState {
@@ -57,6 +57,7 @@ public class GameState implements Updateable {
 		case KeyBindings.SCROLL_LEFT:
 		case KeyBindings.SCROLL_RIGHT:
 			scrollingState = ScrollingState.NONE;
+			scrollingVelocity = 1;
 			break;
 		}
 	}
