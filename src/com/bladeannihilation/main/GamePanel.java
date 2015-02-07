@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -23,9 +21,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	 */
 	private static final long serialVersionUID = 3599089849376471699L;
 
-	public static int WIDTH = 640;
-	public static int HEIGHT = 480;
-	
+	public static int WIDTH = 720;
+	public static int HEIGHT = 540;
+
 	public static Point mouseLocation = new Point(0, 0);
 	public static boolean mousePressed = false;
 	public static boolean releaseWaiting = false;
@@ -42,6 +40,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private int currentFPS = 0;
 	private int second = 0; //stores time elapsed in current second
 	private int updatesPerSecond = 0;
+	private KeyboardHandler kh;
 	private GameState gs;
 
 	private BufferedImage buffer;
@@ -54,10 +53,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		GamePanel.HEIGHT = height;
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
-		addKeyListener(new KeyboardHandler());
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		gsm = new GameStateManager();
+		gsm = new GameStateManager(this);
+		addKeyListener((kh = new KeyboardHandler(gsm, null)));
 		requestFocusInWindow();
 	}
 
@@ -66,7 +65,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		g = (Graphics2D)buffer.getGraphics();
 		gsm.setGraphics(g);
 		videoMem = getGraphics();
-		gs = new GameState(g); //game state is loaded by this class instead of panel because it needs more speed
+		if(gs != null) {
+			gs.setGraphics(g);
+		}
 	}
 
 	public void beginRun() {
@@ -117,7 +118,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			}
 
 			updatesPerSecond++;
-			
+
 			//draw code
 			if(gameRunning) {
 				gs.draw(lag/msPerTick);
@@ -130,9 +131,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				updatesPerSecond = 0;
 				second = 0;
 			}
-			
+
 			videoMem.drawImage(buffer, 0, 0, WIDTH, HEIGHT, null);
-			
+
 			if(limitFPS) {
 				wait = msPerFrame-(System.currentTimeMillis()-current);
 				if(wait < 0) {
@@ -157,7 +158,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -170,7 +171,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		mousePressed = false;
 		releaseWaiting = true;
 	}
-	
+
 	public static boolean releaseCheck() {
 		if(releaseWaiting) {
 			releaseWaiting = false;
@@ -182,13 +183,13 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -200,12 +201,19 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void mouseMoved(MouseEvent e) {
 		mouseLocation = e.getPoint();
 	}
-	
+
 	public static boolean handleSize() {
 		if(sizeChangeUpdate) {
 			sizeChangeUpdate = false;
 			return true;
 		}
 		return false;
+	}
+
+	public void initGame() {
+		if(gs == null) {
+			gs = new GameState(g); //game state is loaded by this class instead of panel because it needs more speed
+			kh.setGameState(gs);
+		}
 	}
 }

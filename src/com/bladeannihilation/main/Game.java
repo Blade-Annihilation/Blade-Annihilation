@@ -11,9 +11,11 @@ import java.lang.reflect.Method;
 import javax.swing.JFrame;
 
 public class Game {
+
+   //public static final GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 	
-	public static final int initialHeight = 480;
-	public static final int initialWidth = 640;
+	public static final int initialHeight = 540;
+	public static final int initialWidth = 720;
 	
 	public static GamePanel gp;
 	
@@ -55,6 +57,7 @@ public class Game {
 		});
 		
 		frame.setVisible(true);
+		//device.setFullScreenWindow(frame);
 		gp.beginRun();
 	}
 	
@@ -79,22 +82,22 @@ public class Game {
 	        setDockIconImage.invoke(application, squid);
 	    } catch (IllegalAccessException e) {
 			System.out.println("Error setting dock icon for OSX #1");
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			System.out.println("Error setting dock icon for OSX #2");
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			System.out.println("Error setting dock icon for OSX #3");
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (NoSuchMethodException e) {
 			System.out.println("Error setting dock icon for OSX #4");
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (SecurityException e) {
 			System.out.println("Error setting dock icon for OSX #5");
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			System.out.println("Error setting dock icon for OSX #6");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 }

@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 
 import com.bladeannihilation.main.Resources;
-import com.bladeannihilation.main.GamePanel;
 
 public class Level {
 	private File f;
@@ -15,10 +14,9 @@ public class Level {
 	private String name;
 	private int numRows = 0;
 	private int numColumns = 0;
-   private int x = 0;
-   private int y = 0;
-   public BufferedImage bi;
-	
+	private Location spawn;
+	public BufferedImage bi;
+
 	public Level(String filename) throws FileNotFoundException {
 		f = Resources.getLevel(filename);
 		Scanner s = new Scanner(f);
@@ -27,64 +25,90 @@ public class Level {
 		name = dataArr[0];
 		numRows = Integer.parseInt(dataArr[1]);
 		numColumns = Integer.parseInt(dataArr[2]);
-		data = new Tile[numRows][numColumns];
+		data = new Tile[numColumns][numRows];
 		String line;
-      bi = new BufferedImage(numColumns*16, numRows*16, BufferedImage.TYPE_INT_RGB);
-      Graphics2D g = (Graphics2D)bi.getGraphics();
+		bi = new BufferedImage(numColumns*16, numRows*16, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = (Graphics2D)bi.getGraphics();
 		for(int l = 0; l < numRows; l++) {
 			line = s.nextLine();
 			char[] a = line.toCharArray();
 			for(int i = 0; i < a.length; i++) {
 				switch(a[i]) {
 				case '#':
-					data[l][i] = Tile.WALL;
+					data[i][l] = Tile.WALL;
 					break;
 				case '.':
-					data[l][i] = Tile.DIRT;
+					data[i][l] = Tile.DIRT;
 					break;
 				case ':':
-					data[l][i] = Tile.GRASS;
+					data[i][l] = Tile.GRASS;
 					break;
 				case '\'':
-					data[l][i] = Tile.COBBLESTONE;
+					data[i][l] = Tile.COBBLESTONE;
 					break;
 				case 'a':
-					data[l][i] = Tile.TREE;
+					data[i][l] = Tile.TREE;
 					break;
 				case 'd':
-					data[l][i] = Tile.DOOR;
+					data[i][l] = Tile.DOOR;
 					break;
 				case 'w':
-					data[l][i] = Tile.ROOF;
+					data[i][l] = Tile.ROOF;
 					break;
 				case 'q':
-					data[l][i] = Tile.WALL_HOUSE;
+					data[i][l] = Tile.WALL_HOUSE;
 					break;
 				case 'b':
-					data[l][i] = Tile.BREAKABLE;
+					data[i][l] = Tile.BREAKABLE;
 					break;
 				case 'p':
-					data[l][i] = Tile.SPAWN;
+					data[i][l] = Tile.SPAWN;
+					spawn = new Location(i, l);
 					break;
 				default:
 					data[l][i] = Tile.UNKNOWN;
 				}
-            g.drawImage(Resources.getTileImage(data[l][i]), i*16, l*16, 16, 16, null);
+				g.drawImage(Resources.getTileImage(data[i][l]), i*16, l*16, 16, 16, null);
 			}
 		}
 		s.close();
-      g.dispose();
+		g.dispose();
 	}
-   public Tile tileAt(int x, int y) {
-      return data[y][x];
-   }
+	@SuppressWarnings("incomplete-switch")
+	public boolean movable(int x, int y) {
+		if(x < 0 || y < 0 || x > numColumns-1 || y > numRows-1) {
+			if(y > numRows) {
+				return true;
+			}
+			return false;
+		}
+		//Graphics2D g = (Graphics2D)bi.getGraphics();
+		switch(data[x][y]) {
+		case WALL:
+		case WALL_HOUSE:
+		case ROOF:
+		case BREAKABLE:
+			//g.drawImage(Resources.spawn, x*16, y*16, 16, 16, null);
+			//g.dispose();
+			return false;
+		}
+		//g.drawImage(Resources.wall, x*16, y*16, 16, 16, null);
+		//g.dispose();
+		return true;
+	}
+	public Tile tileAt(int x, int y) {
+		return data[y][x];
+	}
 	public String getName() {
 		return name;
 	}
-   public int getWidth() {
-      return numColumns;
-   }
-   public int getHeight() {
-      return numRows;
-   }
+	public int getWidth() {
+		return numColumns;
+	}
+	public int getHeight() {
+		return numRows;
+	}
+	public Location getSpawn() {
+		return spawn;
+	}
 }

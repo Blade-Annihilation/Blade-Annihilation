@@ -1,3 +1,5 @@
+package com.bladeannihilation.gameobject;
+
 public class Block {
    private int x = 0;
    private int y = 0;
@@ -13,7 +15,7 @@ public class Block {
    public int getY() {
       return y;
    }
-   public int getType() {
+   public Tile getType() {
       return type;
    }
 }

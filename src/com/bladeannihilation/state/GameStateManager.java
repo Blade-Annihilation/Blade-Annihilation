@@ -2,9 +2,11 @@ package com.bladeannihilation.state;
 
 import java.awt.Graphics2D;
 
+import com.bladeannihilation.main.GamePanel;
 import com.bladeannihilation.main.Updateable;
 
 public class GameStateManager implements Updateable {
+	private GamePanel gp;
 	private Graphics2D g;
 	private State state;
 	private MenuState ms;
@@ -44,7 +46,8 @@ public class GameStateManager implements Updateable {
 		return false;
 	}
 
-	public GameStateManager() {
+	public GameStateManager(GamePanel gp) {
+		this.gp = gp;
 		setState(State.MENU);
 	}
 
@@ -82,5 +85,17 @@ public class GameStateManager implements Updateable {
 		default:
 			break;
 		}
+	}
+
+	public void keyPressed(int keyCode) {
+		
+	}
+
+	public void keyReleased(int keyCode) {
+		
+	}
+
+	public void initGame() {
+		gp.initGame();
 	}
 }

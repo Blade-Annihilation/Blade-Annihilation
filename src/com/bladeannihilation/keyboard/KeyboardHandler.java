@@ -1,18 +1,43 @@
 package com.bladeannihilation.keyboard;
 
-public class KeyboardHandler {
-	private static KeyReceivable[] events;
-	private static void addToReceivable(KeyReceivable kr) {
-		int len = events.length;
-		KeyReceivable[] buffer = new KeyReceivable[len+1];
-		for(int i = 0; i < events.length; i++) {
-			buffer[i] = events[i];
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+
+import com.bladeannihilation.main.GamePanel;
+import com.bladeannihilation.state.GameState;
+import com.bladeannihilation.state.GameStateManager;
+
+public class KeyboardHandler implements KeyListener {
+	//private KeyBindings[] kb;
+	GameStateManager gsm;
+	GameState gs;
+	public KeyboardHandler(GameStateManager gsm, GameState gs) {
+		this.gsm = gsm;
+		this.gs = gs;
+	}
+	public void setGameState(GameState gs) {
+		this.gs = gs;
+	}
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() < 150) {
+			KeyBindings.keysPressed[e.getKeyCode()] = true;
 		}
-		buffer[len] = kr;
-		events = buffer;
-		System.gc();
+		if(GamePanel.gameRunning) {
+			gs.keyPressed(e.getKeyCode());
+		} else {
+			gsm.keyPressed(e.getKeyCode());
+		}
 	}
-	public static void registerHandler(KeyReceivable kr) {
-		addToReceivable(kr);
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() < 150) {
+			KeyBindings.keysPressed[e.getKeyCode()] = false;
+		}
+		if(GamePanel.gameRunning) {
+			gs.keyReleased(e.getKeyCode());
+		} else {
+			gsm.keyReleased(e.getKeyCode());
+		}
 	}
+	public void keyTyped(KeyEvent e) {}
+
 }

@@ -58,6 +58,7 @@ public class MenuState implements Updateable {
 			quit.regState();
 			if(GamePanel.releaseCheck()) {
 				GamePanel.gameRunning = true;
+				gsm.initGame();
 			}
 		} else if(preferences.testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			quit.regState();
