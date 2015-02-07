@@ -25,9 +25,9 @@ public class Game {
 		Languages.initialize(c.language);
 		frame = new JFrame(Languages.TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Image squid = Resources.getImage("squid.png");
-		frame.setIconImage(squid);
-		junkForOSX(frame, squid);
+		Image icon = Resources.getImage("icon.png");
+		frame.setIconImage(icon);
+		junkForOSX(frame, icon);
 		gp = new GamePanel(initialWidth, initialHeight);
 		frame.setContentPane(gp);
 		frame.pack();
@@ -69,7 +69,7 @@ public class Game {
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static void junkForOSX(Window window, Image squid) {
+	public static void junkForOSX(Window window, Image icon) {
 	    try {
 	        Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
 	        Class params[] = new Class[]{Window.class, Boolean.TYPE};
@@ -86,7 +86,7 @@ public class Game {
 	        Class params[] = new Class[1];
 	        params[0] = Image.class;
 	        Method setDockIconImage = util.getMethod("setDockIconImage", params);
-	        setDockIconImage.invoke(application, squid);
+	        setDockIconImage.invoke(application, icon);
 	    } catch (IllegalAccessException e) {
 			System.out.println("Error setting dock icon for OSX #1");
 			//e.printStackTrace();
