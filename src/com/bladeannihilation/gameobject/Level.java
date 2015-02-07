@@ -92,6 +92,9 @@ public class Level {
 				case 'b':
 					data[i-goPast][l] = Tile.BREAKABLE;
 					break;
+				case 'f':
+					data[i-goPast][l] = Tile.FLOORING;
+					break;
 				case 'p':
 					data[i-goPast][l] = Tile.SPAWN;
 					if(spawn == null) {

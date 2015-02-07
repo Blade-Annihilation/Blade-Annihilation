@@ -22,6 +22,7 @@ public class Resources {
 	public static BufferedImage unknown = getTile("unknown.png");
 	public static BufferedImage wall = getTile("wall.png");
 	public static BufferedImage wall_house = getTile("wall_house.png");
+	public static BufferedImage flooring = getTile("flooring.png");
 	public static BufferedImage getImage(String filename) {
 		File f = new File("resources" + sep + "images" + sep + filename);
 		try {
@@ -65,6 +66,7 @@ public class Resources {
 		case DIRT:
 			return dirt;
 		case DOOR:
+		case RETURN:
 			return door;
 		case GRASS:
 			return grass;
@@ -76,8 +78,9 @@ public class Resources {
 			return wall;
 		case WALL_HOUSE:
 			return wall_house;
+		case FLOORING:
+			return flooring;
 		case SPAWN:
-		case RETURN:
 			return spawn;
 		}
 		return unknown;

@@ -12,5 +12,6 @@ public enum Tile {
 	BREAKABLE,
 	SPAWN,
 	UNKNOWN,
-	RETURN
+	RETURN,
+	FLOORING
 }
