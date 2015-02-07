@@ -1,6 +1,7 @@
 package com.bladeannihilation.gameobject;
 
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 
 import com.bladeannihilation.keyboard.KeyBindings;
 import com.bladeannihilation.main.Resources;
@@ -69,6 +70,12 @@ public class Player extends Entity {
 			if(!l.isFollowingPlayer()) {
 				l.followPlayer();
 			}
+			if(l.currentLevel.isSublevel && l.currentLevel.feetTouchExit((int)x, (int)y)) {
+				l.popLevel();
+				Location s = l.currentLevel.loadLoc();
+				x = s.x;
+				y = s.y+1;
+			}
 		} else if(KeyBindings.keysPressed[KeyBindings.UP]) {
 			if(l.currentLevel.movable((int)x, (int)(y-movementDelta)) && ((int)x == x ? true : l.currentLevel.movable((int)(x+1), (int)(y-movementDelta)))) {
 				y-=movementDelta;
@@ -78,6 +85,17 @@ public class Player extends Entity {
 			yState = Movement.RETURN;
 			if(!l.isFollowingPlayer()) {
 				l.followPlayer();
+			}
+			if(l.currentLevel.headTouchesDoor((int)x, (int)y)) {
+				try {
+					l.currentLevel.storeLoc(new Location((int)x, (int)y));
+					l.pushLevel(new Level(l.currentLevel.getFilename(), l.currentLevel.doorID((int)x, (int)y)));
+					Location s = l.currentLevel.getSpawn();
+					x = s.x;
+					y = s.y-2;
+				} catch (FileNotFoundException e) {
+					l.currentLevel.loadLoc();
+				}
 			}
 		} else {
 			yState = Movement.NORM;

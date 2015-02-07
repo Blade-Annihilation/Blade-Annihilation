@@ -11,5 +11,6 @@ public enum Tile {
 	WALL_HOUSE,
 	BREAKABLE,
 	SPAWN,
-	UNKNOWN
+	UNKNOWN,
+	RETURN
 }

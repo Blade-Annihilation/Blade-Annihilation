@@ -23,6 +23,8 @@ public class GameState implements Updateable {
 	private byte scrollTimer = 0;
 	public static int gameScale = 16;
 	private Player p;
+	private Level[] levelStack = new Level[2]; //can accept more sublevels later
+	private byte levelPointer = 0;
 
 	public enum ScrollingState {
 		FOLLOW_PLAYER,
@@ -62,11 +64,29 @@ public class GameState implements Updateable {
 			break;
 		}
 	}
+	
+	public synchronized void pushLevel(Level l) {
+		if(levelPointer + 1 >= levelStack.length) {
+			System.out.println("Better check your levels!");
+			return;
+		}
+		levelStack[++levelPointer] = l;
+		currentLevel = levelStack[levelPointer];
+	}
+	
+	public synchronized void popLevel() {
+		levelStack[levelPointer] = null;
+		currentLevel = null;
+		System.gc();
+		currentLevel = levelStack[--levelPointer];
+	}
 
 	public GameState(Graphics2D g) {
 		this.g = g;
 		try {
-			currentLevel = new Level("tutorial.lvl");
+			currentLevel = new Level("tutorial");
+			levelPointer = 0;
+			levelStack[0] = currentLevel;
 			Location spawn = currentLevel.getSpawn();
 			p = new Player(spawn, this);
 			x = spawn.x-GamePanel.WIDTH/32;
@@ -87,22 +107,29 @@ public class GameState implements Updateable {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		g.drawImage(currentLevel.bi, -(int)(x*gameScale), -(int)(y*gameScale), currentLevel.getWidth()*gameScale, currentLevel.getHeight()*gameScale, null);
-		if(p.x > x && p.y > y && p.x < x + currentLevel.getWidth() && p.y < y + currentLevel.getHeight()) {
-			g.drawImage(p.getImage(), (int)((p.x - x) * gameScale), (int)((p.y - y) * gameScale), gameScale, gameScale*2, null);
+		//if(p.x > x && p.y > y && p.x < x + currentLevel.getWidth() && p.y < y + currentLevel.getHeight()) {
+		g.drawImage(p.getImage(), (int)((p.x - x) * gameScale), (int)((p.y - y) * gameScale), gameScale, gameScale*2, null);
 			//System.out.println("EXISTS");
-		} else {
-			//System.out.println("DOESN'T EXIST");
-		}
+		//}
 		g.setColor(Color.WHITE);
+		g.drawString("x: " + p.x + " y: " + p.y, 5, 27);
 	}
 
-	public void followPlayer() {
-		scrollingState = ScrollingState.RETURN;
+	public void followPlayer() { //bring camera to show player
 		double desiredx = p.x - GamePanel.WIDTH/(2*gameScale);
 		double desiredy = p.y - GamePanel.HEIGHT/(2*gameScale);
-		float totalDistance = (float) Math.sqrt(Math.pow(x - desiredx, 2) + Math.pow(y - desiredy, 2));
-		totalDistance/=1000;
+		if(desiredx == x && desiredy == y) { //already at player
+			scrollingState = ScrollingState.FOLLOW_PLAYER;
+			return;
+		}
+		scrollingState = ScrollingState.RETURN;
+		float totalDistance = (float) Math.sqrt(Math.pow(x - desiredx, 2) + Math.pow(y - desiredy, 2)); //pythagorean theorem!
+		totalDistance/=1000; //now pretend it's name has changed because it represents speed
 		totalDistance*=gameScale;
+		System.out.println("Pre-scrolling velocity: " + totalDistance);
+		if(totalDistance < 0.35f) { //make sure it can't go too slow
+			totalDistance = 0.35f;
+		}
 		scrollingVelocity = totalDistance;
 		System.out.println("Scrolling velocity: " + scrollingVelocity);
 	}

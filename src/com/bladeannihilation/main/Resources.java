@@ -18,6 +18,7 @@ public class Resources {
 	public static BufferedImage roof = getTile("roof.png");
 	public static BufferedImage tree = getTile("tree.png");
 	public static BufferedImage spawn = getTile("spawn.png");
+	public static BufferedImage return_spawn = getTile("spawn.png");
 	public static BufferedImage unknown = getTile("unknown.png");
 	public static BufferedImage wall = getTile("wall.png");
 	public static BufferedImage wall_house = getTile("wall_house.png");
@@ -35,7 +36,10 @@ public class Resources {
 		return new File(filename);
 	}
 	public static File getLevel(String filename) {
-		return new File("level" + sep + filename);
+		return new File("level" + sep + filename + sep + "main.lvl");
+	}
+	public static File getSubLevel(String originalLevel, char filename) {
+		return new File("level" + sep + originalLevel + sep + filename + ".lvl");
 	}
 	public static void initialize() {
 
@@ -73,6 +77,7 @@ public class Resources {
 		case WALL_HOUSE:
 			return wall_house;
 		case SPAWN:
+		case RETURN:
 			return spawn;
 		}
 		return unknown;
