@@ -22,7 +22,7 @@ public class Player extends Entity {
 	public Player(Location loc, GameState l) {
 		this.l = l;
 		x = loc.x;
-		y = loc.x;
+		y = loc.y;
 	}
 	public enum Movement {
 		CONTINUE,

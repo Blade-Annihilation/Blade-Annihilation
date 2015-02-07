@@ -63,7 +63,9 @@ public class Level {
 					break;
 				case 'p':
 					data[i][l] = Tile.SPAWN;
-					spawn = new Location(i, l);
+					if(spawn == null) {
+						spawn = new Location(i, l);
+					}
 					break;
 				default:
 					data[l][i] = Tile.UNKNOWN;
