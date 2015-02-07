@@ -40,7 +40,9 @@ public class Player extends Entity {
 				x = (int)(x-movementDelta+1);
 			}
 			xState = Movement.RETURN;
-			l.followPlayer();
+			if(!l.isFollowingPlayer()) {
+				l.followPlayer();
+			}
 		} else if(KeyBindings.keysPressed[KeyBindings.RIGHT]) {
 			if(l.currentLevel.movable((int)(x+1+movementDelta), (int)y) && l.currentLevel.movable((int)(x+1+movementDelta), (int)(y+1)) && ((int)y == y ? true : l.currentLevel.movable((int)(x+1+movementDelta), (int)(y+2)))) {
 				x+=movementDelta;
@@ -51,7 +53,9 @@ public class Player extends Entity {
 				x = (int)(x+movementDelta);
 			}
 			xState = Movement.CONTINUE;
-			l.followPlayer();
+			if(!l.isFollowingPlayer()) {
+				l.followPlayer();
+			}
 		} else {
 			xState = Movement.NORM;
 		}
@@ -62,7 +66,9 @@ public class Player extends Entity {
 				y = (int)(y+movementDelta);
 			}
 			yState = Movement.CONTINUE;
-			l.followPlayer();
+			if(!l.isFollowingPlayer()) {
+				l.followPlayer();
+			}
 		} else if(KeyBindings.keysPressed[KeyBindings.UP]) {
 			if(l.currentLevel.movable((int)x, (int)(y-movementDelta)) && ((int)x == x ? true : l.currentLevel.movable((int)(x+1), (int)(y-movementDelta)))) {
 				y-=movementDelta;
@@ -70,7 +76,9 @@ public class Player extends Entity {
 				y = (int)y;
 			}
 			yState = Movement.RETURN;
-			l.followPlayer();
+			if(!l.isFollowingPlayer()) {
+				l.followPlayer();
+			}
 		} else {
 			yState = Movement.NORM;
 		}

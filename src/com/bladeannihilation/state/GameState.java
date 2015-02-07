@@ -16,23 +16,24 @@ public class GameState implements Updateable {
 
 	private Graphics2D g;
 	public Level currentLevel;
-	private ScrollingState scrollingState = ScrollingState.FOLLOW_PLAYER;
+	public ScrollingState scrollingState = ScrollingState.FOLLOW_PLAYER;
 	private float scrollingVelocity = 1;
 	private double x = 0;
 	private double y = 0;
 	private byte scrollTimer = 0;
 	public static int gameScale = 16;
 	private Player p;
-	
+
 	public enum ScrollingState {
 		FOLLOW_PLAYER,
 		UP,
 		DOWN,
 		LEFT,
 		RIGHT,
-		NONE
+		NONE,
+		RETURN
 	}
-	
+
 	public void keyPressed(int key) {
 		switch(key) {
 		case KeyBindings.SCROLL_UP:
@@ -49,7 +50,7 @@ public class GameState implements Updateable {
 			break;
 		}
 	}
-	
+
 	public void keyReleased(int key) {
 		switch(key) {
 		case KeyBindings.SCROLL_UP:
@@ -94,14 +95,30 @@ public class GameState implements Updateable {
 		}
 		g.setColor(Color.WHITE);
 	}
-	
+
 	public void followPlayer() {
-		scrollingState = ScrollingState.FOLLOW_PLAYER;
+		scrollingState = ScrollingState.RETURN;
+		double desiredx = p.x - GamePanel.WIDTH/(2*gameScale);
+		double desiredy = p.y - GamePanel.HEIGHT/(2*gameScale);
+		float totalDistance = (float) Math.sqrt(Math.pow(x - desiredx, 2) + Math.pow(y - desiredy, 2));
+		totalDistance/=1000;
+		totalDistance*=gameScale;
+		scrollingVelocity = totalDistance;
+		System.out.println("Scrolling velocity: " + scrollingVelocity);
+	}
+	
+	public boolean isFollowingPlayer() {
+		return scrollingState == ScrollingState.RETURN || scrollingState == ScrollingState.FOLLOW_PLAYER;
 	}
 
 	@Override
 	public void update() {
 		switch(scrollingState) {
+		case FOLLOW_PLAYER:
+			scrollingVelocity = 1;
+			x = p.x - GamePanel.WIDTH/(2*gameScale);
+			y = p.y - GamePanel.HEIGHT/(2*gameScale);
+			break;
 		case UP:
 			y-=scrollingVelocity;
 			if(++scrollTimer >= 50) {
@@ -130,11 +147,52 @@ public class GameState implements Updateable {
 				scrollingVelocity++;
 			}
 			break;
-		case FOLLOW_PLAYER:
-			scrollingVelocity = 1;
-			x = p.x - GamePanel.WIDTH/(2*gameScale);
-			y = p.y - GamePanel.HEIGHT/(2*gameScale);
-			break;
+		case RETURN:
+			double desiredx = p.x - GamePanel.WIDTH/(2*gameScale);
+			double desiredy = p.y - GamePanel.HEIGHT/(2*gameScale);
+			if(x == desiredx && y == desiredy) {
+				scrollingState = ScrollingState.FOLLOW_PLAYER;
+				scrollingVelocity = 1;
+			} else {
+				if(x < desiredx) {
+					x += scrollingVelocity;
+					if(x >= desiredx) {
+						x = desiredx;
+						if(y == desiredy) {
+							scrollingState = ScrollingState.FOLLOW_PLAYER;
+							scrollingVelocity = 1;
+						}
+					}
+				} else if(x > desiredx) {
+					x -= scrollingVelocity;
+					if(x <= desiredx) {
+						x = desiredx;
+						if(y == desiredy) {
+							scrollingState = ScrollingState.FOLLOW_PLAYER;
+							scrollingVelocity = 1;
+						}
+					}
+				}
+				if(y > desiredy) {
+					y -= scrollingVelocity;
+					if(y <= desiredy) {
+						y = desiredy;
+						if(x == desiredx) {
+							scrollingState = ScrollingState.FOLLOW_PLAYER;
+							scrollingVelocity = 1;
+						}
+					}
+				} else if(y < desiredy) {
+					y += scrollingVelocity;
+					if(y >= desiredy) {
+						y = desiredy;
+						if(x == desiredx) {
+							scrollingState = ScrollingState.FOLLOW_PLAYER;
+							scrollingVelocity = 1;
+						}
+					}
+				}
+			}
 		default:
 			break;
 		}
