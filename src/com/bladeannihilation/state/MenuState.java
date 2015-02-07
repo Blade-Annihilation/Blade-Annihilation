@@ -88,6 +88,9 @@ public class MenuState implements Updatable {
 		} else if(gameStart[2].testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			if(GamePanel.releaseCheck()) {
 				state = State.MAIN;
+				gameStart = null;
+				System.gc();
+				return;
 			}
 		}
 		gameStart[0].draw(g);
@@ -111,11 +114,12 @@ public class MenuState implements Updatable {
 				//gsm.initGame();
 				//}
 				state = State.BEGIN;
+				gsm.setState(GameStateManager.State.GAME);
 			}
 		} else if(preferences.testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			quit.regState();
 			if(GamePanel.releaseCheck()) {
-				System.out.println("HEY PREFERENCES");
+				gsm.setState(GameStateManager.State.PREFERENCES);
 			}
 		} else if(quit.testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			if(GamePanel.releaseCheck()) {

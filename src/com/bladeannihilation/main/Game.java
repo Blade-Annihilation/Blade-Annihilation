@@ -17,12 +17,13 @@ public class Game {
 	public static final int initialHeight = 540;
 	public static final int initialWidth = 720;
 	public static final Config c = new Config();
+	private static JFrame frame;
 	
 	public static GamePanel gp;
 	
 	public static void main(String[] args) {
 		Languages.initialize(c.language);
-		JFrame frame = new JFrame(Languages.TITLE);
+		frame = new JFrame(Languages.TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Image squid = Resources.getImage("squid.png");
 		frame.setIconImage(squid);
@@ -61,6 +62,10 @@ public class Game {
 		frame.setVisible(true);
 		//device.setFullScreenWindow(frame);
 		gp.beginRun();
+	}
+	
+	public static void setTitle(String title) {
+		frame.setTitle(title);
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})

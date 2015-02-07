@@ -38,6 +38,11 @@ public class Config {
 			f.delete();
 		}
 	}
+	public static void setLanguageAndUpdate(String language) {
+		setLanguage(language);
+		Languages.initialize(language);
+		Game.setTitle(Languages.TITLE);
+	}
 	public static void setLanguage(String language) {
 		if(language.length() != 5) {
 			return;

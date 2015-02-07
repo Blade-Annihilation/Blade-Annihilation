@@ -47,4 +47,8 @@ public class PauseState implements Updatable {
 			GamePanel.gameRunning = true;
 		}
 	}
+
+	public void setGraphics(Graphics2D g) {
+		this.g = g;
+	}
 }

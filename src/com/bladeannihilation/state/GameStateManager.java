@@ -11,6 +11,7 @@ public class GameStateManager implements Updatable {
 	private State state;
 	private MenuState ms;
 	private PauseState ps;
+	private PreferencesState prefs;
 
 	public enum State {
 		MENU,
@@ -25,6 +26,12 @@ public class GameStateManager implements Updatable {
 		if(ms != null) {
 			ms.setGraphics(g);
 		}
+		if(ps != null) {
+			ps.setGraphics(g);
+		}
+		if(prefs != null) {
+			prefs.setGraphics(g);
+		}
 	}
 
 	public boolean setState(State state) {
@@ -37,6 +44,9 @@ public class GameStateManager implements Updatable {
 				if(ms == null) {
 					ms = new MenuState(g, this);
 				}
+				prefs = null;
+				ps = null;
+				System.gc();
 				this.state = State.MENU;
 				break;
 			case PAUSE:
@@ -45,9 +55,21 @@ public class GameStateManager implements Updatable {
 				} else {
 					ps.init();
 				}
+				prefs = null;
+				ms = null;
+				System.gc();
 				this.state = State.PAUSE;
 				break;
 			case PREFERENCES:
+				if(prefs == null) {
+					prefs = new PreferencesState(g, this);
+				} else {
+					prefs.init();
+				}
+				ps = null;
+				ms = null;
+				System.gc();
+				this.state = State.PREFERENCES;
 				break;
 		}
 		return false;
@@ -72,6 +94,7 @@ public class GameStateManager implements Updatable {
 				ps.draw(time);
 				break;
 			case PREFERENCES:
+				prefs.draw(time);
 				break;
 			default:
 				break;
@@ -90,6 +113,7 @@ public class GameStateManager implements Updatable {
 		case PAUSE:
 			break;
 		case PREFERENCES:
+			prefs.update();
 			break;
 		default:
 			break;

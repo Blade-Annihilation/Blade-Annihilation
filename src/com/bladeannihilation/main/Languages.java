@@ -14,17 +14,21 @@ public class Languages {
 	public static String SAVE_RESTORE;
 	public static String BACK;
 	private static final String defaultLanguage = "en_us";
+	public static String currentLanguage = defaultLanguage;
+	public static final String[] strings = {"en_us", "std_b"};
 
 	public static void initialize(String language) {
 		File f = Resources.getLanguage(language);
 		try {
 			Scanner s = new Scanner(f);
 			parse(s);
+			currentLanguage = language;
 		} catch (FileNotFoundException e) {
 			try {
 				Scanner s = new Scanner(Resources.getLanguage(defaultLanguage));
 				parse(s);
 				Config.setLanguage(defaultLanguage);
+				currentLanguage = defaultLanguage;
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			}
