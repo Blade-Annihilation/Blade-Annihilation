@@ -7,12 +7,13 @@ import java.io.FileNotFoundException;
 
 import com.bladeannihilation.keyboard.KeyBindings;
 import com.bladeannihilation.main.GamePanel;
-import com.bladeannihilation.main.Updateable;
+import com.bladeannihilation.main.Updatable;
+import com.bladeannihilation.state.GameStateManager.State;
 import com.bladeannihilation.gameobject.Level;
 import com.bladeannihilation.gameobject.Location;
 import com.bladeannihilation.gameobject.Player;
 
-public class GameState implements Updateable {
+public class GameState implements Updatable {
 
 	private Graphics2D g;
 	public Level currentLevel;
@@ -25,6 +26,7 @@ public class GameState implements Updateable {
 	private Player p;
 	private Level[] levelStack = new Level[2]; //can accept more sublevels later
 	private byte levelPointer = 0;
+	public GamePanel gp;
 
 	public enum ScrollingState {
 		FOLLOW_PLAYER,
@@ -50,6 +52,9 @@ public class GameState implements Updateable {
 		case KeyBindings.SCROLL_RIGHT:
 			scrollingState = ScrollingState.RIGHT;
 			break;
+		case KeyBindings.PAUSE:
+			gp.gsm.setState(State.PAUSE);
+			GamePanel.gameRunning = false;
 		}
 	}
 
@@ -81,8 +86,9 @@ public class GameState implements Updateable {
 		currentLevel = levelStack[--levelPointer];
 	}
 
-	public GameState(Graphics2D g) {
+	public GameState(Graphics2D g, GamePanel gp) {
 		this.g = g;
+		this.gp = gp;
 		try {
 			currentLevel = new Level("tutorial");
 			levelPointer = 0;

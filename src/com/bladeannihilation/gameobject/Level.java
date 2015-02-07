@@ -148,6 +148,7 @@ public class Level {
 		case WALL_HOUSE:
 		case ROOF:
 		case BREAKABLE:
+		case TREE:
 			//g.drawImage(Resources.spawn, x*16, y*16, 16, 16, null);
 			//g.dispose();
 			return false;

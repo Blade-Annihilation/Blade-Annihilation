@@ -6,10 +6,11 @@ import java.awt.image.BufferedImage;
 
 import com.bladeannihilation.gui.Button;
 import com.bladeannihilation.main.GamePanel;
+import com.bladeannihilation.main.Languages;
 import com.bladeannihilation.main.Resources;
-import com.bladeannihilation.main.Updateable;
+import com.bladeannihilation.main.Updatable;
 
-public class MenuState implements Updateable {
+public class MenuState implements Updatable {
 	GameStateManager gsm;
 	Graphics2D g;
 	Button begin;
@@ -24,9 +25,9 @@ public class MenuState implements Updateable {
 	public MenuState(Graphics2D g, GameStateManager gsm) {
 		this.gsm = gsm;
 		this.g = g;
-		begin = new Button("START THAT GAME WOW YUM YUM", GamePanel.WIDTH/2-125, 10, 250, 50);
-		preferences = new Button("HEY GIMME SOME PREFERENCES", GamePanel.WIDTH/2-125, 120, 250, 50);
-		quit = new Button("I WANNA LEAVE GET OUT HEY", GamePanel.WIDTH/2-125, 180, 250, 50);
+		begin = new Button(Languages.START, GamePanel.WIDTH/2-125, 10, 250, 50);
+		preferences = new Button(Languages.PREFERENCES, GamePanel.WIDTH/2-125, 120, 250, 50);
+		quit = new Button(Languages.QUIT, GamePanel.WIDTH/2-125, 180, 250, 50);
 	}
 	
 	public void setParent(GameStateManager gsm) {

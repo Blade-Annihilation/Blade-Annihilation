@@ -16,11 +16,13 @@ public class Game {
 	
 	public static final int initialHeight = 540;
 	public static final int initialWidth = 720;
+	public static final Config c = new Config();
 	
 	public static GamePanel gp;
 	
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("Blade Annihilation");
+		Languages.initialize(c.language);
+		JFrame frame = new JFrame(Languages.TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Image squid = Resources.getImage("squid.png");
 		frame.setIconImage(squid);

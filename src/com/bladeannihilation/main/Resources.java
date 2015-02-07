@@ -36,6 +36,9 @@ public class Resources {
 	public static File getFile(String filename) {
 		return new File(filename);
 	}
+	public static File getLanguage(String filename) {
+		return new File("resources" + sep + "lang" + sep + filename + sep + "Strings");
+	}
 	public static File getLevel(String filename) {
 		return new File("level" + sep + filename + sep + "main.lvl");
 	}

@@ -44,6 +44,9 @@ public class Player extends Entity {
 			if(!l.isFollowingPlayer()) {
 				l.followPlayer();
 			}
+			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && l.currentLevel.tileAt((int)(x-1), (int)(y+0.5)) == Tile.BREAKABLE) {
+				l.currentLevel.replaceTileAt((int)(x-1), (int)(y+0.5), Tile.COBBLESTONE);
+			}
 		} else if(KeyBindings.keysPressed[KeyBindings.RIGHT]) {
 			if(l.currentLevel.movable((int)(x+1+movementDelta), (int)y) && l.currentLevel.movable((int)(x+1+movementDelta), (int)(y+1)) && ((int)y == y ? true : l.currentLevel.movable((int)(x+1+movementDelta), (int)(y+2)))) {
 				x+=movementDelta;
@@ -56,6 +59,9 @@ public class Player extends Entity {
 			xState = Movement.CONTINUE;
 			if(!l.isFollowingPlayer()) {
 				l.followPlayer();
+			}
+			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && l.currentLevel.tileAt((int)(x+1), (int)(y+0.5)) == Tile.BREAKABLE) {
+				l.currentLevel.replaceTileAt((int)(x+1), (int)(y+0.5), Tile.COBBLESTONE);
 			}
 		} else {
 			xState = Movement.NORM;
@@ -75,6 +81,9 @@ public class Player extends Entity {
 				Location s = l.currentLevel.loadLoc();
 				x = s.x;
 				y = s.y+1;
+			}
+			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && l.currentLevel.tileAt((int)(x+0.5), (int)(y+2)) == Tile.BREAKABLE) {
+				l.currentLevel.replaceTileAt((int)(x+0.5), (int)(y+2), Tile.COBBLESTONE);
 			}
 		} else if(KeyBindings.keysPressed[KeyBindings.UP]) {
 			if(l.currentLevel.movable((int)x, (int)(y-movementDelta)) && ((int)x == x ? true : l.currentLevel.movable((int)(x+1), (int)(y-movementDelta)))) {
@@ -96,6 +105,9 @@ public class Player extends Entity {
 				} catch (FileNotFoundException e) {
 					l.currentLevel.loadLoc();
 				}
+			}
+			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && l.currentLevel.tileAt((int)(x+0.5), (int)(y-0.5)) == Tile.BREAKABLE) {
+				l.currentLevel.replaceTileAt((int)(x+0.5), (int)(y-0.5), Tile.COBBLESTONE);
 			}
 		} else {
 			yState = Movement.NORM;

@@ -41,12 +41,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private int second = 0; //stores time elapsed in current second
 	private int updatesPerSecond = 0;
 	private KeyboardHandler kh;
-	private GameState gs;
+	public GameState gs;
 
 	private BufferedImage buffer;
 	private Graphics2D g;
 	private Graphics videoMem;
-	private GameStateManager gsm;
+	public GameStateManager gsm;
 
 	public GamePanel(int width, int height) {
 		GamePanel.WIDTH = width;
@@ -212,7 +212,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 
 	public void initGame() {
 		if(gs == null) {
-			gs = new GameState(g); //game state is loaded by this class instead of panel because it needs more speed
+			gs = new GameState(g, this); //game state is loaded by this class instead of panel because it needs more speed
 			kh.setGameState(gs);
 		}
 	}
