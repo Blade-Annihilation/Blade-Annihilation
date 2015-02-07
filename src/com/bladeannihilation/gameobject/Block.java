@@ -1,3 +1,5 @@
+package com.bladeannihilation.gameobject;
+
 public class Block {
    private int x = 0;
    private int y = 0;
