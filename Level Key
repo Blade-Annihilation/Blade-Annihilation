@@ -1,0 +1,10 @@
+#=wall
+.=empty ground (dirt)
+:=grass
+'=cobblestone path
+a=tree
+d=vertical door
+w=roof
+q=wall of house
+b=breakable
+p=spawn
