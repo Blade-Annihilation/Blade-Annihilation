@@ -116,8 +116,7 @@ public class GameState implements Updatable {
 	public void draw(double time) {
 		g.setColor(currentLevel.backgroundColor);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
-		//g.drawImage(currentLevel.bi, -(int)(x*gameScale), -(int)(y*gameScale), currentLevel.getWidth()*gameScale, currentLevel.getHeight()*gameScale, null);
-		currentLevel.bi.getSubimage(-(int)(x*gameScale), -(int)(y*gameScale), currentLevel.getWidth(), currentLevel.getHeight());
+		g.drawImage(currentLevel.bi, -(int)(x*gameScale), -(int)(y*gameScale), currentLevel.getWidth()*gameScale, currentLevel.getHeight()*gameScale, null);
 		//if(p.x > x && p.y > y && p.x < x + currentLevel.getWidth() && p.y < y + currentLevel.getHeight()) {
 		g.drawImage(p.getImage(), (int)((p.x - x) * gameScale), (int)((p.y - y) * gameScale), gameScale, gameScale*2, null);
 			//System.out.println("EXISTS");

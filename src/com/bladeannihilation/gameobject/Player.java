@@ -66,6 +66,14 @@ public class Player extends Entity {
 	public Movement yState = Movement.NORM;
 	@Override
 	public void update() {
+		if(++animTimer > 5) {
+			if(animPlacement < 3) {
+				animPlacement++;
+			} else {
+				animPlacement = 0;
+			}
+			animTimer = 0;
+		}
 		if(KeyBindings.keysPressed[KeyBindings.LEFT]) {
 			if(l.currentLevel.movable((int)(x-movementDelta), (int)y) && l.currentLevel.movable((int)(x-movementDelta), (int)(y+1)) && ((int)y == y ? true : l.currentLevel.movable((int)(x-movementDelta), (int)(y+2)))) {
 				x-=movementDelta;
@@ -147,14 +155,6 @@ public class Player extends Entity {
 	}
 	@SuppressWarnings("incomplete-switch")
 	public BufferedImage getImage() {
-		if(++animTimer > 5) {
-			if(animPlacement < 3) {
-				animPlacement++;
-			} else {
-				animPlacement = 0;
-			}
-			animTimer = 0;
-		}
 		switch(xState) {
 		case CONTINUE:
 			return rightAnim[animPlacement];
