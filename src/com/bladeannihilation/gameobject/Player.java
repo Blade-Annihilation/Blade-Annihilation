@@ -13,17 +13,49 @@ public class Player extends Entity {
 	 * 
 	 */
 	private static final long serialVersionUID = 7866169072443073011L;
-	public static final BufferedImage norm = Resources.getPlayerState("norm");
-	public static final BufferedImage up = Resources.getPlayerState("up");
-	public static final BufferedImage down = Resources.getPlayerState("down");
-	public static final BufferedImage left = Resources.getPlayerState("left");
-	public static final BufferedImage right = Resources.getPlayerState("right");
+	private static BufferedImage norm = Resources.getPlayerState("norm");
+	private static BufferedImage up = Resources.getPlayerState("up");
+	private static BufferedImage down = Resources.getPlayerState("down");
+	private static BufferedImage left = Resources.getPlayerState("left");
+	private static BufferedImage right = Resources.getPlayerState("right");
+	public static BufferedImage[] normAnim = new BufferedImage[4];
+	public static BufferedImage[] upAnim = new BufferedImage[4];
+	public static BufferedImage[] downAnim = new BufferedImage[4];
+	public static BufferedImage[] leftAnim = new BufferedImage[4];
+	public static BufferedImage[] rightAnim = new BufferedImage[4];
 	public static final double movementDelta = 0.2;
 	private GameState l;
+	private byte animPlacement = 0;
+	private byte animTimer = 0;
 	public Player(Location loc, GameState l) {
 		this.l = l;
 		x = loc.x;
 		y = loc.y;
+		for(int i = 0; i < normAnim.length; i++) {
+			normAnim[i] = norm.getSubimage(i*16, 0, 16, 32);
+		}
+		norm.flush();
+		norm = null;
+		for(int i = 0; i < upAnim.length; i++) {
+			upAnim[i] = up.getSubimage(i*16, 0, 16, 32);
+		}
+		up.flush();
+		up = null;
+		for(int i = 0; i < downAnim.length; i++) {
+			downAnim[i] = down.getSubimage(i*16, 0, 16, 32);
+		}
+		down.flush();
+		down = null;
+		for(int i = 0; i < leftAnim.length; i++) {
+			leftAnim[i] = left.getSubimage(i*16, 0, 16, 32);
+		}
+		left.flush();
+		left = null;
+		for(int i = 0; i < rightAnim.length; i++) {
+			rightAnim[i] = right.getSubimage(i*16, 0, 16, 32);
+		}
+		right.flush();
+		right = null;
 	}
 	public enum Movement {
 		CONTINUE,
@@ -115,18 +147,27 @@ public class Player extends Entity {
 	}
 	@SuppressWarnings("incomplete-switch")
 	public BufferedImage getImage() {
+		if(++animTimer > 5) {
+			if(animPlacement < 3) {
+				animPlacement++;
+			} else {
+				animPlacement = 0;
+			}
+			animTimer = 0;
+		}
+		System.out.println(animPlacement);
 		switch(xState) {
 		case CONTINUE:
-			return right;
+			return rightAnim[animPlacement];
 		case RETURN:
-			return left;
+			return leftAnim[animPlacement];
 		}
 		switch(yState) {
 		case CONTINUE:
-			return down;
+			return downAnim[animPlacement];
 		case RETURN:
-			return up;
+			return upAnim[animPlacement];
 		}
-		return norm;
+		return normAnim[animPlacement];
 	}
 }
