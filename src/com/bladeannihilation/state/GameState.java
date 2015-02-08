@@ -113,7 +113,7 @@ public class GameState implements Updatable {
 
 	@Override
 	public void draw(double time) {
-		g.setColor(Color.BLACK);
+		g.setColor(currentLevel.backgroundColor);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		g.drawImage(currentLevel.bi, -(int)(x*gameScale), -(int)(y*gameScale), currentLevel.getWidth()*gameScale, currentLevel.getHeight()*gameScale, null);
 		//if(p.x > x && p.y > y && p.x < x + currentLevel.getWidth() && p.y < y + currentLevel.getHeight()) {

@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import com.bladeannihilation.main.Resources;
@@ -15,6 +16,7 @@ public class Level {
 	private String name;
 	private int numRows = 0;
 	private int numColumns = 0;
+	public Color backgroundColor;
 	private String filename;
 	protected char sublevelname;
 	protected boolean isSublevel = false;
@@ -42,6 +44,8 @@ public class Level {
 		name = dataArr[0];
 		numRows = Integer.parseInt(dataArr[1]);
 		numColumns = Integer.parseInt(dataArr[2]);
+		String backgroundString = dataArr[3];
+		backgroundColor = new Color(Integer.parseInt(backgroundString.substring(0, 3)), Integer.parseInt(backgroundString.substring(3, 6)), Integer.parseInt(backgroundString.substring(6, 9)));
 		data = new Tile[numColumns][numRows];
 		String line;
 		bi = new BufferedImage(numColumns*16, numRows*16, BufferedImage.TYPE_INT_RGB);
