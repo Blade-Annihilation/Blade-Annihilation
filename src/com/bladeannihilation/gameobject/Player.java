@@ -87,6 +87,9 @@ public class Player extends Entity {
 			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && x >= 1 && l.currentLevel.tileAt((int)(x-1), (int)(y+0.5)) == Tile.BREAKABLE) {
 				l.currentLevel.replaceTileAt((int)(x-1), (int)(y+0.5), Tile.COBBLESTONE);
 			}
+			if(l.currentLevel.headTouchesInfo((int)x, (int)y)) {
+				l.infoBlock((int)x, (int)y);
+			}
 		} else if(KeyBindings.keysPressed[KeyBindings.RIGHT]) {
 			if(l.currentLevel.movable((int)(x+1+movementDelta), (int)y) && l.currentLevel.movable((int)(x+1+movementDelta), (int)(y+1)) && ((int)y == y ? true : l.currentLevel.movable((int)(x+1+movementDelta), (int)(y+2)))) {
 				x+=movementDelta;
@@ -102,6 +105,9 @@ public class Player extends Entity {
 			}
 			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && x < l.currentLevel.getWidth()-1 && l.currentLevel.tileAt((int)(x+1), (int)(y+0.5)) == Tile.BREAKABLE) {
 				l.currentLevel.replaceTileAt((int)(x+1), (int)(y+0.5), Tile.COBBLESTONE);
+			}
+			if(l.currentLevel.headTouchesInfo((int)x, (int)y)) {
+				l.infoBlock((int)x, (int)y);
 			}
 		} else {
 			xState = Movement.NORM;
@@ -125,6 +131,9 @@ public class Player extends Entity {
 			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && y < l.currentLevel.getHeight()-2 && l.currentLevel.tileAt((int)(x+0.5), (int)(y+2)) == Tile.BREAKABLE) {
 				l.currentLevel.replaceTileAt((int)(x+0.5), (int)(y+2), Tile.COBBLESTONE);
 			}
+			if(l.currentLevel.headTouchesInfo((int)x, (int)y)) {
+				l.infoBlock((int)x, (int)y);
+			}
 		} else if(KeyBindings.keysPressed[KeyBindings.UP]) {
 			if(l.currentLevel.movable((int)x, (int)(y-movementDelta)) && ((int)x == x ? true : l.currentLevel.movable((int)(x+1), (int)(y-movementDelta)))) {
 				y-=movementDelta;
@@ -135,15 +144,19 @@ public class Player extends Entity {
 			if(!l.isFollowingPlayer()) {
 				l.followPlayer();
 			}
-			if(l.currentLevel.headTouchesDoor((int)x, (int)y)) {
-				try {
-					l.currentLevel.storeLoc(new Location((int)x, (int)y));
-					l.pushLevel(new Level(l.currentLevel.getFilename(), l.currentLevel.doorID((int)x, (int)y)));
-					Location s = l.currentLevel.getSpawn();
-					x = s.x;
-					y = s.y-2;
-				} catch (FileNotFoundException e) {
-					l.currentLevel.loadLoc();
+			if(l.currentLevel.headTouchesSpecial((int)x, (int)y)) {
+				if(l.currentLevel.headTouchesDoor((int)x, (int)y)) {
+					try {
+						l.currentLevel.storeLoc(new Location((int)x, (int)y));
+						l.pushLevel(new Level(l.currentLevel.getFilename(), l.currentLevel.doorID((int)x, (int)y)));
+						Location s = l.currentLevel.getSpawn();
+						x = s.x;
+						y = s.y-2;
+					} catch (FileNotFoundException e) {
+						l.currentLevel.loadLoc();
+					}
+				} else if(l.currentLevel.headTouchesInfo((int)x, (int)y)) {
+					l.infoBlock((int)x, (int)y);
 				}
 			}
 			if(KeyBindings.keysPressed[KeyBindings.ATTACK] && y >= 0.5 && l.currentLevel.tileAt((int)(x+0.5), (int)(y-0.5)) == Tile.BREAKABLE) {

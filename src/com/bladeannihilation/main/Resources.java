@@ -26,6 +26,7 @@ public class Resources {
 	public static BufferedImage wall = getTile("wall.png");
 	public static BufferedImage wall_house = getTile("wall_house.png");
 	public static BufferedImage flooring = getTile("flooring.png");
+	public static BufferedImage info = getTile("info.png");
 	public static BufferedImage getImage(String filename) {
 		File f = new File("resources" + sep + "images" + sep + filename);
 		try {
@@ -92,6 +93,8 @@ public class Resources {
 			return roof_right;
 		case ROOF_CENTER:
 			return roof_center;
+		case INFO:
+			return info;
 		case SPAWN:
 			return spawn;
 		}

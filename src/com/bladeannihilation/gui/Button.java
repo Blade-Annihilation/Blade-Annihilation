@@ -8,6 +8,8 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
+import com.bladeannihilation.main.GamePanel;
+
 public class Button {
 	
 	public boolean coveredByMouse = false;
@@ -27,6 +29,7 @@ public class Button {
 		this.text = text;
 		bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D)bi.getGraphics();
+		g.setFont(GamePanel.gameFont);
 		rect = new Rectangle(x, y, width, height);
 		drawReg();
 	}

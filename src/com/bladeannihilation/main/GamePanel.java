@@ -1,6 +1,7 @@
 package com.bladeannihilation.main;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -29,6 +30,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public static boolean releaseWaiting = false;
 	public static boolean sizeChangeUpdate = false;
 	public static boolean gameRunning = false;
+	public static final Font gameFont = new Font("Monospaced", Font.PLAIN, 12);
 
 	private Thread thread;
 	private boolean running = false;
@@ -63,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void initDisplay() {
 		buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D)buffer.getGraphics();
+		g.setFont(gameFont);
 		gsm.setGraphics(g);
 		videoMem = getGraphics();
 		if(gs != null) {

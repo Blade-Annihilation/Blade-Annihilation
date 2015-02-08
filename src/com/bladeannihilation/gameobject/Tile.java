@@ -16,5 +16,6 @@ public enum Tile {
 	SPAWN,
 	UNKNOWN,
 	RETURN,
-	FLOORING
+	FLOORING,
+	INFO
 }

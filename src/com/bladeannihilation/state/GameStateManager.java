@@ -87,7 +87,9 @@ public class GameStateManager implements Updatable {
 				ms.draw(time);
 				break;
 			case PAUSE:
-				gp.gs.draw(time);
+				if(ps.progression < ps.progressionMax) {
+					gp.gs.draw(time);
+				}
 				ps.draw(time);
 				break;
 			case PREFERENCES:

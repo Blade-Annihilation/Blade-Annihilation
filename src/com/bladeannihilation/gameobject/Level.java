@@ -21,7 +21,8 @@ public class Level {
 	protected char sublevelname;
 	protected boolean isSublevel = false;
 	private Location spawn;
-	private Hashtable<String, Character> doors = new Hashtable<String, Character>();
+	private Hashtable<String, Character> doors = new Hashtable<String, Character>(); //also contains info block information
+	private String[] infoArr;
 	private Location storedLoc;
 	public BufferedImage bi;
 	public Level(String filename, char sublevelname) throws FileNotFoundException {
@@ -50,6 +51,7 @@ public class Level {
 		String line;
 		bi = new BufferedImage(numColumns*16, numRows*16, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D)bi.getGraphics();
+		byte infoNum = 0;
 		for(int l = 0; l < numRows; l++) {
 			line = s.nextLine();
 			char[] a = line.toCharArray();
@@ -114,6 +116,11 @@ public class Level {
 						spawn = new Location(i-goPast, l);
 					}
 					break;
+				case 'i':
+					data[i-goPast][l] = Tile.INFO;
+					doors.put(i-goPast + "i" + l, new Character((char)infoNum));
+					infoNum++;
+					break;
 				case 'r':
 					data[i-goPast][l] = Tile.RETURN;
 					if(spawn == null) {
@@ -129,6 +136,12 @@ public class Level {
 		if(spawn == null) {
 			spawn = new Location(0, 0);
 		}
+		if(infoNum > 0) {
+			infoArr = new String[infoNum];
+			for(int i = 0; i < infoNum; i++) {
+				infoArr[i] = s.nextLine();
+			}
+		}
 		s.close();
 		g.dispose();
 	}
@@ -138,8 +151,8 @@ public class Level {
 		}
 		return data[x][y] == Tile.RETURN;
 	}
-	public boolean headTouchesDoor(int x, int y) {
-		return data[x][y] == Tile.DOOR;
+	public boolean headTouchesSpecial(int x, int y) {
+		return data[x][y] == Tile.DOOR || data[x][y] == Tile.INFO;
 	}
 	public char doorID(int x, int y) {
 		return doors.get(x + "/" + y);
@@ -201,5 +214,18 @@ public class Level {
 		Location a = storedLoc;
 		storedLoc = null;
 		return a;
+	}
+	public boolean headTouchesDoor(int x, int y) {
+		return data[x][y] == Tile.DOOR;
+	}
+	public boolean headTouchesInfo(int x, int y) {
+		if(data[x][y] == Tile.INFO) {
+			replaceTileAt(x, y, Tile.GRASS);
+			return true;
+		}
+		return false;
+	}
+	public String infoAt(int x, int y) {
+		return infoArr[(int)doors.get(x + "i" + y)];
 	}
 }

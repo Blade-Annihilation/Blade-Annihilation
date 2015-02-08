@@ -1,9 +1,13 @@
 package com.bladeannihilation.state;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 import java.io.FileNotFoundException;
+
+import javax.swing.text.JTextComponent.KeyBinding;
 
 import com.bladeannihilation.keyboard.KeyBindings;
 import com.bladeannihilation.main.GamePanel;
@@ -26,6 +30,9 @@ public class GameState implements Updatable {
 	private Player p;
 	private Level[] levelStack = new Level[2]; //can accept more sublevels later
 	private byte levelPointer = 0;
+	private String[] infoText = null;
+	private byte infoProgression = 0;
+	private int[] infoPlacement = new int[2];
 	public GamePanel gp;
 
 	public enum ScrollingState {
@@ -55,6 +62,23 @@ public class GameState implements Updatable {
 		case KeyBindings.PAUSE:
 			gp.gsm.setState(State.PAUSE);
 			GamePanel.gameRunning = false;
+			break;
+		case KeyBindings.UP:
+			if(infoText != null) {
+				if(infoProgression < infoText.length - 1) {
+					infoProgression++;
+					FontMetrics fm = g.getFontMetrics();
+					Rectangle2D r = fm.getStringBounds(infoText[infoProgression], g);
+					int x = (GamePanel.WIDTH - 60 - (int) r.getWidth()) / 2;
+					int y = (120 - (int) r.getHeight()) / 2 + fm.getAscent();
+					infoPlacement[0] = x;
+					infoPlacement[1] = y+GamePanel.HEIGHT-120;
+				} else {
+					infoProgression = 0;
+					infoPlacement = new int[2];
+					infoText = null;
+				}
+			}
 			break;
 		case KeyBindings.EXIT:
 			gp.gsm.setState(State.MENU);
@@ -91,6 +115,9 @@ public class GameState implements Updatable {
 	}
 
 	public GameState(Graphics2D g, GamePanel gp) {
+		infoText = new String[2];
+		infoText[0] = "Welcome to Blade Annihilation! Press " + ((char)KeyBindings.UP) + " to continue.";
+		infoText[1] = "Use " + ((char)KeyBindings.UP) + ((char)KeyBindings.DOWN) + ((char)KeyBindings.LEFT) + ((char)KeyBindings.RIGHT) + " to move, and " + ((char)KeyBindings.SCROLL_UP) + ((char)KeyBindings.SCROLL_DOWN) + ((char)KeyBindings.SCROLL_LEFT) + ((char)KeyBindings.SCROLL_RIGHT) + " to move the camera. Find blue info blocks for text.";
 		this.g = g;
 		this.gp = gp;
 		try {
@@ -121,7 +148,22 @@ public class GameState implements Updatable {
 		g.drawImage(p.getImage(), (int)((p.x - x) * gameScale), (int)((p.y - y) * gameScale), gameScale, gameScale*2, null);
 			//System.out.println("EXISTS");
 		//}
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
+		if(infoText != null) {
+			if(infoPlacement[0] == 0) {
+				FontMetrics fm = g.getFontMetrics();
+				Rectangle2D r = fm.getStringBounds(infoText[infoProgression], g);
+				int x = (GamePanel.WIDTH - 60 - (int) r.getWidth()) / 2;
+				int y = (120 - (int) r.getHeight()) / 2 + fm.getAscent();
+				infoPlacement[0] = x;
+				infoPlacement[1] = y+GamePanel.HEIGHT-120;
+			}
+			g.fillRect(0, GamePanel.HEIGHT - 120, GamePanel.WIDTH, 120);
+			g.setColor(Color.WHITE);
+			g.drawString(infoText[infoProgression], infoPlacement[0], infoPlacement[1]);
+		} else {
+			g.setColor(Color.WHITE);
+		}
 		g.drawString("x: " + p.x + " y: " + p.y, 5, 27);
 	}
 
@@ -150,6 +192,9 @@ public class GameState implements Updatable {
 
 	@Override
 	public void update() {
+		if(infoText != null) {
+			return;
+		}
 		switch(scrollingState) {
 		case FOLLOW_PLAYER:
 			scrollingVelocity = 1;
@@ -234,6 +279,10 @@ public class GameState implements Updatable {
 			break;
 		}
 		p.update();
+	}
+
+	public void infoBlock(int x, int y) {
+		infoText = currentLevel.infoAt(x, y).split("\\!BREAK");
 	}
 
 }
