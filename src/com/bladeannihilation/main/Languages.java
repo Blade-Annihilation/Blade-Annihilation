@@ -15,7 +15,7 @@ public class Languages {
 	public static String BACK;
 	private static final String defaultLanguage = "en_us";
 	public static String currentLanguage = defaultLanguage;
-	public static final String[] strings = {"en_us", "std_b"};
+	public static final String[] strings = {"en_us", "std_b", "jp_jp"};
 
 	public static void initialize(String language) {
 		File f = Resources.getLanguage(language);
