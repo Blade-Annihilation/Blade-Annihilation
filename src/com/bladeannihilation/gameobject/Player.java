@@ -155,7 +155,6 @@ public class Player extends Entity {
 			}
 			animTimer = 0;
 		}
-		System.out.println(animPlacement);
 		switch(xState) {
 		case CONTINUE:
 			return rightAnim[animPlacement];
