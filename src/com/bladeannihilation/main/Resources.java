@@ -15,7 +15,10 @@ public class Resources {
 	public static BufferedImage dirt = getTile("dirt.png");
 	public static BufferedImage door = getTile("door.png");
 	public static BufferedImage grass = getTile("grass.png");
-	public static BufferedImage roof = getTile("roof.png");
+	public static BufferedImage roof_top = getTile("roof_top.png");
+	public static BufferedImage roof_left = getTile("roof_left.png");
+	public static BufferedImage roof_right = getTile("roof_right.png");
+	public static BufferedImage roof_center = getTile("roof_center.png");
 	public static BufferedImage tree = getTile("tree.png");
 	public static BufferedImage spawn = getTile("spawn.png");
 	public static BufferedImage return_spawn = getTile("spawn.png");
@@ -73,8 +76,6 @@ public class Resources {
 			return door;
 		case GRASS:
 			return grass;
-		case ROOF:
-			return roof;
 		case TREE:
 			return tree;
 		case WALL:
@@ -83,6 +84,14 @@ public class Resources {
 			return wall_house;
 		case FLOORING:
 			return flooring;
+		case ROOF_TOP:
+			return roof_top;
+		case ROOF_LEFT:
+			return roof_left;
+		case ROOF_RIGHT:
+			return roof_right;
+		case ROOF_CENTER:
+			return roof_center;
 		case SPAWN:
 			return spawn;
 		}
