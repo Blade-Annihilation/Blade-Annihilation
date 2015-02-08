@@ -114,7 +114,7 @@ public class MenuState implements Updatable {
 				//gsm.initGame();
 				//}
 				state = State.BEGIN;
-				gsm.setState(GameStateManager.State.GAME);
+				//gsm.setState(GameStateManager.State.GAME);
 			}
 		} else if(preferences.testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			quit.regState();

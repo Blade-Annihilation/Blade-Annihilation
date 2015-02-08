@@ -55,6 +55,7 @@ public class GameState implements Updatable {
 		case KeyBindings.PAUSE:
 			gp.gsm.setState(State.PAUSE);
 			GamePanel.gameRunning = false;
+			break;
 		case KeyBindings.EXIT:
 			gp.gsm.setState(State.MENU);
 			GamePanel.gameRunning = false;
