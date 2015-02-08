@@ -33,7 +33,7 @@ public class GameStateManager implements Updatable {
 			prefs.setGraphics(g);
 		}
 	}
-
+	
 	public boolean setState(State state) {
 		switch(state) {
 			case GAME:
@@ -55,9 +55,6 @@ public class GameStateManager implements Updatable {
 				} else {
 					ps.init();
 				}
-				prefs = null;
-				ms = null;
-				System.gc();
 				this.state = State.PAUSE;
 				break;
 			case PREFERENCES:
@@ -90,7 +87,7 @@ public class GameStateManager implements Updatable {
 				ms.draw(time);
 				break;
 			case PAUSE:
-				//gp.gs.draw(time);
+				gp.gs.draw(time);
 				ps.draw(time);
 				break;
 			case PREFERENCES:

@@ -11,7 +11,7 @@ import com.bladeannihilation.main.Updatable;
 public class PauseState implements Updatable {
 	private Graphics2D g;
 	//private GamePanel gp;
-	private Color transparent = new Color(0, 0, 0, 10);
+	private Color transparent = new Color(0, 0, 0, 50);
 	private byte progression = 0;
 	
 	public PauseState(Graphics2D g, GameStateManager gameStateManager) {
@@ -27,10 +27,10 @@ public class PauseState implements Updatable {
 	public void draw(double time) {
 		if(progression < 100) {
 			g.setColor(transparent);
-			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+			g.fillRect(0, 0, GamePanel.WIDTH, (int)(GamePanel.HEIGHT*(((float)progression)/100.0f)));
 			progression++;
 		} else {
-			g.setColor(Color.BLACK);
+			g.setColor(transparent);
 			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		}
 		g.setColor(Color.WHITE);
