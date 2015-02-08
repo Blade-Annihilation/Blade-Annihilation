@@ -88,7 +88,16 @@ public class Level {
 					doorChainLength++;
 					break;
 				case 'w':
-					data[i-goPast][l] = Tile.ROOF;
+					data[i-goPast][l] = Tile.ROOF_TOP;
+					break;
+				case 'z':
+					data[i-goPast][l] = Tile.ROOF_CENTER;
+					break;
+				case 'y':
+					data[i-goPast][l] = Tile.ROOF_RIGHT;
+					break;
+				case 'x':
+					data[i-goPast][l] = Tile.ROOF_LEFT;
 					break;
 				case 'q':
 					data[i-goPast][l] = Tile.WALL_HOUSE;
@@ -150,7 +159,10 @@ public class Level {
 		switch(data[x][y]) {
 		case WALL:
 		case WALL_HOUSE:
-		case ROOF:
+		case ROOF_TOP:
+		case ROOF_RIGHT:
+		case ROOF_CENTER:
+		case ROOF_LEFT:
 		case BREAKABLE:
 		case TREE:
 			//g.drawImage(Resources.spawn, x*16, y*16, 16, 16, null);
