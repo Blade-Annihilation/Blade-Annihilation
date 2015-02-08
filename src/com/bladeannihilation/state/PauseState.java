@@ -28,7 +28,6 @@ public class PauseState implements Updatable {
 		if(progression < 100) {
 			g.setColor(transparent);
 			g.fillRect(0, 0, GamePanel.WIDTH, (int)(GamePanel.HEIGHT*(((float)progression)/100.0f)));
-			progression++;
 		} else {
 			g.setColor(transparent);
 			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
@@ -39,7 +38,9 @@ public class PauseState implements Updatable {
 
 	@Override
 	public void update() {
-		
+		if(progression < 100) {
+			progression++;
+		}
 	}
 
 	public void keyPressed(int keyCode) {

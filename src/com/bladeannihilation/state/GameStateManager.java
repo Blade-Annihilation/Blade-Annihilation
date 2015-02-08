@@ -108,6 +108,7 @@ public class GameStateManager implements Updatable {
 			ms.update();
 			break;
 		case PAUSE:
+			ps.update();
 			break;
 		case PREFERENCES:
 			prefs.update();
