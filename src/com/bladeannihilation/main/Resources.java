@@ -46,6 +46,9 @@ public class Resources {
 	public static File getLevel(String filename) {
 		return new File("level" + sep + filename + sep + "main.lvl");
 	}
+	public static File getAudio(String filename) {
+		return new File("resources" + sep + "sound" + sep + filename);
+	}
 	public static File getSubLevel(String originalLevel, char filename) {
 		return new File("level" + sep + originalLevel + sep + filename + ".lvl");
 	}

@@ -1,24 +1,22 @@
 package com.bladeannihilation.main;	
 
-import javax.sound.sampled.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public class Audio{
-	public void setSong(String songName){
-      String song = spongName;
-   } 
-   public void audioRun(){
-      AudioInputStream stream;
-		AudioFormat format;
-		DataLine.Info info;
-		Clip clip;
-        while(true){
-			stream = AudioSystem.getAudioInputStream(song);
-			format = stream.getFormat();
-			info = new DataLine.Info(Clip.class, format);
-			clip = (Clip)AudioSystem.getLine(info);
-			clip.open(stream);
-			clip.start();			
-		}//end while loop  	
+   public static void audioRun(String name) throws IOException {
+	   InputStream in = new FileInputStream(Resources.getAudio(name));
+       AudioStream audioStream = new AudioStream(in);
+       AudioPlayer.player.start(audioStream);
+   }
+   public static void main(String[] args) throws Exception
+   {
+	   String turn="turnDownForWhat.ogg";
+	   audioRun(turn);
    }
 }
