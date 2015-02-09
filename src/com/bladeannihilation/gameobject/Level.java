@@ -24,7 +24,7 @@ public class Level {
 	private Hashtable<String, Character> doors = new Hashtable<String, Character>(); //also contains info block information
 	private String[] infoArr;
 	private Location storedLoc;
-	public BufferedImage bi;
+	public BufferedImage chunks[];
 	public Level(String filename, char sublevelname) throws FileNotFoundException {
 		this.filename = filename;
 		this.sublevelname = sublevelname;
