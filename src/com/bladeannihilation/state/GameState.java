@@ -83,6 +83,13 @@ public class GameState implements Updatable {
 		case KeyBindings.EXIT:
 			gp.gsm.setState(State.MENU);
 			GamePanel.gameRunning = false;
+			break;
+		case KeyBindings.ZOOM_IN:
+			gameScale++;
+			break;
+		case KeyBindings.ZOOM_OUT:
+			gameScale--;
+			break;
 		}
 	}
 

@@ -1,5 +1,7 @@
 package com.bladeannihilation.keyboard;
 
+import java.awt.event.KeyEvent;
+
 public class KeyBindings {
 	public static final int UP = 87;
 	public static final int DOWN = 83;
@@ -16,6 +18,8 @@ public class KeyBindings {
 	public static final int SCROLL_LEFT = 74;
 	public static final int SCROLL_RIGHT = 76;
 	public static final int SCROLL_DOWN = 75;
+	public static final int ZOOM_IN = KeyEvent.VK_PERIOD;
+	public static final int ZOOM_OUT = KeyEvent.VK_COMMA;
 	//public static final int length = State.values().length;
 	public static final boolean[] keysPressed = new boolean[150];
 	/*public enum State {
