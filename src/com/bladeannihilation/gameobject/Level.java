@@ -4,15 +4,13 @@ import java.util.Hashtable;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.awt.image.BufferedImage;
 import java.awt.Color;
-import java.awt.Graphics2D;
 
 import com.bladeannihilation.main.Resources;
 
 public class Level {
 	private File f;
-	private Tile[][] data;
+	public Tile[][] data;
 	private String name;
 	private int numRows = 0;
 	private int numColumns = 0;
@@ -24,7 +22,6 @@ public class Level {
 	private Hashtable<String, Character> doors = new Hashtable<String, Character>(); //also contains info block information
 	private String[] infoArr;
 	private Location storedLoc;
-	public BufferedImage chunks[];
 	public Level(String filename, char sublevelname) throws FileNotFoundException {
 		this.filename = filename;
 		this.sublevelname = sublevelname;
@@ -49,8 +46,8 @@ public class Level {
 		backgroundColor = new Color(Integer.parseInt(backgroundString.substring(0, 3)), Integer.parseInt(backgroundString.substring(3, 6)), Integer.parseInt(backgroundString.substring(6, 9)));
 		data = new Tile[numColumns][numRows];
 		String line;
-		bi = new BufferedImage(numColumns*16, numRows*16, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = (Graphics2D)bi.getGraphics();
+		//BufferedImage bi = new BufferedImage(numColumns*16, numRows*16, BufferedImage.TYPE_INT_RGB);
+		//Graphics2D g = (Graphics2D)bi.getGraphics();
 		byte infoNum = 0;
 		for(int l = 0; l < numRows; l++) {
 			line = s.nextLine();
@@ -130,7 +127,7 @@ public class Level {
 				default:
 					data[i][l] = Tile.UNKNOWN;
 				}
-				g.drawImage(Resources.getTileImage(data[i-goPast][l]), (i-goPast)*16, l*16, 16, 16, null);
+				//g.drawImage(Resources.getTileImage(data[i-goPast][l]), (i-goPast)*16, l*16, 16, 16, null);
 			}
 		}
 		if(spawn == null) {
@@ -143,7 +140,6 @@ public class Level {
 			}
 		}
 		s.close();
-		g.dispose();
 	}
 	public boolean feetTouchExit(int x, int y) {
 		if(++y >= numRows) {
@@ -188,9 +184,6 @@ public class Level {
 	}
 	public void replaceTileAt(int x, int y, Tile t) {
 		data[x][y] = t;
-		Graphics2D g = (Graphics2D)bi.getGraphics();
-		g.drawImage(Resources.getTileImage(t), x*16, y*16, 16, 16, null);
-		g.dispose();
 	}
 	public Tile tileAt(int x, int y) {
 		return data[x][y];

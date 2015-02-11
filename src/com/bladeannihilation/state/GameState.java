@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 
 import javax.swing.text.JTextComponent.KeyBinding;
 
 import com.bladeannihilation.keyboard.KeyBindings;
 import com.bladeannihilation.main.GamePanel;
+import com.bladeannihilation.main.Resources;
 import com.bladeannihilation.main.Updatable;
 import com.bladeannihilation.state.GameStateManager.State;
 import com.bladeannihilation.gameobject.Level;
@@ -33,7 +34,15 @@ public class GameState implements Updatable {
 	private String[] infoText = null;
 	private byte infoProgression = 0;
 	private int[] infoPlacement = new int[2];
+	private BufferedImage currentRender;
+	private static final int renderDistance = 16*20;
+	private int blockNumWidth = 0;
+	private int blockNumHeight = 0;
 	public GamePanel gp;
+	private int startx;
+	private int starty;
+	private int xwidth;
+	private int ywidth;
 
 	public enum ScrollingState {
 		FOLLOW_PLAYER,
@@ -107,11 +116,17 @@ public class GameState implements Updatable {
 	
 	public synchronized void pushLevel(Level l) {
 		if(levelPointer + 1 >= levelStack.length) {
-			System.out.println("Better check your levels!");
-			return;
+			System.out.println("Level pushed, no array space. Allocating...");
+			Level[] tmpLevelStack = new Level[levelPointer+1];
+			for(int i = 0; i < levelStack.length; i++) {
+				tmpLevelStack[i] = levelStack[i];
+			}
+			System.out.println("Allocated!");
+			levelStack = tmpLevelStack;
 		}
 		levelStack[++levelPointer] = l;
 		currentLevel = levelStack[levelPointer];
+		initRender();
 	}
 	
 	public synchronized void popLevel() {
@@ -119,6 +134,7 @@ public class GameState implements Updatable {
 		currentLevel = null;
 		System.gc();
 		currentLevel = levelStack[--levelPointer];
+		initRender();
 	}
 
 	public GameState(Graphics2D g, GamePanel gp) {
@@ -135,11 +151,57 @@ public class GameState implements Updatable {
 			p = new Player(spawn, this);
 			x = spawn.x-GamePanel.WIDTH/32;
 			y = spawn.y-GamePanel.HEIGHT/32;
+			initRender();
 		} catch(FileNotFoundException fnfe) {
 			fnfe.printStackTrace();
 			System.out.println("Tutorial not found, shutting down.");
 			System.exit(1);
 		}
+	}
+	
+	public void initRender() {
+		if(currentRender != null) {
+			currentRender.flush();
+			currentRender = null;
+			System.gc();
+		}
+		blockNumWidth = GamePanel.WIDTH/gameScale+1;
+		blockNumHeight = GamePanel.HEIGHT/gameScale+1;
+		if(x < 0) {
+			startx = 0;
+			xwidth = blockNumWidth+(int)x;
+		} else if(x >= currentLevel.getWidth()) {
+			startx = currentLevel.getWidth()-1;
+			xwidth = 0;
+			return;
+		} else {
+			startx = (int)x;
+			xwidth = blockNumWidth;
+		}
+		if(y < 0) {
+			starty = 0;
+			ywidth = blockNumWidth+(int)y;
+		} else if(y >= currentLevel.getHeight()) {
+			starty = currentLevel.getHeight()-1;
+			ywidth = 0;
+			return;
+		} else {
+			starty = (int)y;
+			ywidth = blockNumHeight;
+		}
+		System.out.println(blockNumWidth + " " + blockNumHeight);
+		currentRender = new BufferedImage(xwidth * gameScale, ywidth * gameScale, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = (Graphics2D)currentRender.getGraphics();
+		for(int i = 0; i < xwidth; i++) {
+			for(int o = 0; o < ywidth; o++) {
+				g.drawImage(Resources.getTileImage(currentLevel.data[i][o]), i*16, o*16, 16, 16, null);
+			}
+		}
+		g.dispose();
+	}
+	
+	public void reRender() {
+		
 	}
 
 	public void setGraphics(Graphics2D g) {
@@ -150,7 +212,7 @@ public class GameState implements Updatable {
 	public void draw(double time) {
 		g.setColor(currentLevel.backgroundColor);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
-		g.drawImage(currentLevel.bi, -(int)(x*gameScale), -(int)(y*gameScale), currentLevel.getWidth()*gameScale, currentLevel.getHeight()*gameScale, null);
+		g.drawImage(currentRender, -(int)(x*gameScale), -(int)(y*gameScale), xwidth*gameScale, ywidth*gameScale, null);
 		//if(p.x > x && p.y > y && p.x < x + currentLevel.getWidth() && p.y < y + currentLevel.getHeight()) {
 		g.drawImage(p.getImage(), (int)((p.x - x) * gameScale), (int)((p.y - y) * gameScale), gameScale, gameScale*2, null);
 			//System.out.println("EXISTS");
@@ -169,9 +231,14 @@ public class GameState implements Updatable {
 			g.setColor(Color.WHITE);
 			g.drawString(infoText[infoProgression], infoPlacement[0], infoPlacement[1]);
 		} else {
+			/*if(x > 0 && y > 0)
+			g.drawString("x: " + (currentLevel.tileAt((int)x, (int)y)) + " y: ", 5, 39);
+			g.drawString("camx: " + x + " camy: " + y, 5, 51);*/
+			//g.fillRect(x, y, width, height);
 			g.setColor(Color.WHITE);
 		}
 		g.drawString("x: " + p.x + " y: " + p.y, 5, 27);
+		g.drawString("camx: " + x + " camy: " + y, 5, 39);
 	}
 
 	public void followPlayer() { //bring camera to show player
@@ -285,6 +352,7 @@ public class GameState implements Updatable {
 		default:
 			break;
 		}
+		
 		p.update();
 	}
 
