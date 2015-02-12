@@ -70,7 +70,7 @@ public class GameStateManager implements Updatable {
 				ms = null;
 				System.gc();
 				this.state = State.PREFERENCES;
-				Audio.endBackgroundMusic();
+				Audio.setBackgroundMusic("testfile");
 				break;
 		}
 		return false;

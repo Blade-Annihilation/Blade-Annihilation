@@ -27,7 +27,9 @@ public class Resources {
 	public static BufferedImage wall_house;
 	public static BufferedImage flooring;
 	public static BufferedImage info;
+	private static boolean gameTilesLoaded = false;
 	public static void loadGameTiles() {
+		if(gameTilesLoaded) return;
 		breakable = getTile("breakable.png");
 		cobblestone = getTile("cobblestone.png");
 		dirt = getTile("dirt.png");
@@ -45,6 +47,7 @@ public class Resources {
 		wall_house = getTile("wall_house.png");
 		flooring = getTile("flooring.png");
 		info = getTile("info.png");
+		gameTilesLoaded = true;
 	}
 	public static BufferedImage getImage(String filename) {
 		File f = new File("resources" + sep + "images" + sep + filename);
