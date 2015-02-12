@@ -68,10 +68,7 @@ public class Audio {
 		}.start();
 	}
 	public static synchronized void setBackgroundMusic(String name) {
-		if(bgThread != null) {
-			bgThread.interrupt();
-		}
-		if(ba != null || isBackgroundRunning) {
+		if(ba != null) {
 			ba.endRun();
 		}
 		bgThread = null;
@@ -95,8 +92,7 @@ public class Audio {
 	{
 		setBackgroundMusic("turnDownForWhat");
 		
-		Thread.sleep(5000);
-		for(int i = 0; i < 50; i++) {
+		for(int i = 0; i < 100; i++) {
 			setBackgroundMusic("turnDownForWhat");
 			Thread.sleep(100);
 		}
