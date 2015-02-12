@@ -2,6 +2,7 @@ package com.bladeannihilation.state;
 
 import java.awt.Graphics2D;
 
+import com.bladeannihilation.main.Audio;
 import com.bladeannihilation.main.GamePanel;
 import com.bladeannihilation.main.Updatable;
 
@@ -48,6 +49,7 @@ public class GameStateManager implements Updatable {
 				ps = null;
 				System.gc();
 				this.state = State.MENU;
+				Audio.setBackgroundMusic("turnDownForWhat");
 				break;
 			case PAUSE:
 				if(ps == null) {
@@ -56,6 +58,7 @@ public class GameStateManager implements Updatable {
 					ps.init();
 				}
 				this.state = State.PAUSE;
+				Audio.endBackgroundMusic();
 				break;
 			case PREFERENCES:
 				if(prefs == null) {
@@ -67,6 +70,7 @@ public class GameStateManager implements Updatable {
 				ms = null;
 				System.gc();
 				this.state = State.PREFERENCES;
+				Audio.endBackgroundMusic();
 				break;
 		}
 		return false;

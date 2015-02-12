@@ -13,7 +13,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class Audio {
 	private static BackgroundAudio ba;
 	private static Thread bgThread;
-	private static boolean isBackgroundRunning = false;
 	public static void playSound(final String name) {
 		new Thread() {
 			@Override
@@ -74,7 +73,6 @@ public class Audio {
 		bgThread = null;
 		ba = null;
 		System.gc();
-		isBackgroundRunning = true;
 		ba = new BackgroundAudio(name);
 		bgThread = new Thread(ba);
 		bgThread.start();
@@ -86,15 +84,5 @@ public class Audio {
 		}
 		bgThread = null;
 		System.gc();
-		isBackgroundRunning = false;
-	}
-	public static void main(String[] args) throws Exception
-	{
-		setBackgroundMusic("turnDownForWhat");
-		
-		for(int i = 0; i < 100; i++) {
-			setBackgroundMusic("turnDownForWhat");
-			Thread.sleep(100);
-		}
 	}
 }
