@@ -10,23 +10,42 @@ import com.bladeannihilation.gameobject.Tile;
 
 public class Resources {
 	public static String sep = File.separator;
-	public static BufferedImage breakable = getTile("breakable.png");
-	public static BufferedImage cobblestone = getTile("cobblestone.png");
-	public static BufferedImage dirt = getTile("dirt.png");
-	public static BufferedImage door = getTile("door.png");
-	public static BufferedImage grass = getTile("grass.png");
-	public static BufferedImage roof_top = getTile("roof_top.png");
-	public static BufferedImage roof_left = getTile("roof_left.png");
-	public static BufferedImage roof_right = getTile("roof_right.png");
-	public static BufferedImage roof_center = getTile("roof_center.png");
-	public static BufferedImage tree = getTile("tree.png");
-	public static BufferedImage spawn = getTile("spawn.png");
-	public static BufferedImage return_spawn = getTile("spawn.png");
-	public static BufferedImage unknown = getTile("unknown.png");
-	public static BufferedImage wall = getTile("wall.png");
-	public static BufferedImage wall_house = getTile("wall_house.png");
-	public static BufferedImage flooring = getTile("flooring.png");
-	public static BufferedImage info = getTile("info.png");
+	public static BufferedImage breakable;
+	public static BufferedImage cobblestone;
+	public static BufferedImage dirt;
+	public static BufferedImage door;
+	public static BufferedImage grass;
+	public static BufferedImage roof_top;
+	public static BufferedImage roof_left;
+	public static BufferedImage roof_right;
+	public static BufferedImage roof_center;
+	public static BufferedImage tree;
+	public static BufferedImage spawn;
+	public static BufferedImage return_spawn;
+	public static BufferedImage unknown;
+	public static BufferedImage wall;
+	public static BufferedImage wall_house;
+	public static BufferedImage flooring;
+	public static BufferedImage info;
+	public static void loadGameTiles() {
+		breakable = getTile("breakable.png");
+		cobblestone = getTile("cobblestone.png");
+		dirt = getTile("dirt.png");
+		door = getTile("door.png");
+		grass = getTile("grass.png");
+		roof_top = getTile("roof_top.png");
+		roof_left = getTile("roof_left.png");
+		roof_right = getTile("roof_right.png");
+		roof_center = getTile("roof_center.png");
+		tree = getTile("tree.png");
+		spawn = getTile("spawn.png");
+		return_spawn = getTile("spawn.png");
+		unknown = getTile("unknown.png");
+		wall = getTile("wall.png");
+		wall_house = getTile("wall_house.png");
+		flooring = getTile("flooring.png");
+		info = getTile("info.png");
+	}
 	public static BufferedImage getImage(String filename) {
 		File f = new File("resources" + sep + "images" + sep + filename);
 		try {

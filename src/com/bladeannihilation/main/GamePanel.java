@@ -63,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	}
 
 	public void initDisplay() {
+		System.out.println("Display initializing");
 		buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D)buffer.getGraphics();
 		g.setFont(gameFont);
@@ -71,6 +72,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		if(gs != null) {
 			gs.setGraphics(g);
 		}
+		showLoading();
 	}
 
 	public void beginRun() {
@@ -79,6 +81,14 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			thread = new Thread(this);
 			thread.start();
 		}
+	}
+	
+	public void showLoading() {
+		g.setColor(java.awt.Color.BLACK);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.setColor(java.awt.Color.WHITE);
+		g.drawString("Loading...", 5, HEIGHT - (g.getFontMetrics().getHeight()));
+		videoMem.drawImage(buffer, 0, 0, WIDTH, HEIGHT, null);
 	}
 
 	/*public static GameState getGameState() {
@@ -214,6 +224,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	}
 
 	public void initGame() {
+		showLoading();
+		Resources.loadGameTiles();
 		if(gs == null) {
 			gs = new GameState(g, this); //game state is loaded by this class instead of panel because it needs more speed
 			kh.setGameState(gs);
