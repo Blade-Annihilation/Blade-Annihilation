@@ -35,7 +35,7 @@ public class GameState implements Updatable {
 	private byte infoProgression = 0;
 	private int[] infoPlacement = new int[2];
 	private BufferedImage currentRender;
-	private static final int renderDistance = 16*20;
+	private static final int renderDistance = 20;
 	private int blockNumWidth = 0;
 	private int blockNumHeight = 0;
 	public GamePanel gp;
@@ -97,7 +97,9 @@ public class GameState implements Updatable {
 			gameScale++;
 			break;
 		case KeyBindings.ZOOM_OUT:
-			gameScale--;
+			if(--gameScale <= 0) {
+				gameScale = 1;
+			}
 			break;
 		}
 	}
@@ -149,8 +151,8 @@ public class GameState implements Updatable {
 			levelStack[0] = currentLevel;
 			Location spawn = currentLevel.getSpawn();
 			p = new Player(spawn, this);
-			x = spawn.x-GamePanel.WIDTH/32;
-			y = spawn.y-GamePanel.HEIGHT/32;
+			x = spawn.x-GamePanel.WIDTH/(2*gameScale);
+			y = spawn.y-GamePanel.HEIGHT/(2*gameScale);
 			initRender();
 		} catch(FileNotFoundException fnfe) {
 			fnfe.printStackTrace();
@@ -168,27 +170,56 @@ public class GameState implements Updatable {
 		blockNumWidth = GamePanel.WIDTH/gameScale+1;
 		blockNumHeight = GamePanel.HEIGHT/gameScale+1;
 		if(x < 0) {
+			System.out.println("x1");
 			startx = 0;
-			xwidth = blockNumWidth+(int)x;
+			xwidth = blockNumWidth+(int)x+renderDistance;
 		} else if(x >= currentLevel.getWidth()) {
+			System.out.println("x2");
 			startx = currentLevel.getWidth()-1;
-			xwidth = 0;
-			return;
+			xwidth = 1;
+			//return;
 		} else {
-			startx = (int)x;
-			xwidth = blockNumWidth;
+			System.out.println("x3");
+			startx = (int)x - renderDistance/2;
+			if(startx < 0) {
+				System.out.println("x5");
+				startx = 0;
+				xwidth = blockNumWidth + renderDistance;
+			} else {
+				System.out.println("x6");
+				xwidth = blockNumWidth + renderDistance/2;
+			}
+		}
+		if(xwidth + startx >= currentLevel.getWidth()) {
+			System.out.println("x4");
+			xwidth = currentLevel.getWidth();
 		}
 		if(y < 0) {
+			System.out.println("y1");
 			starty = 0;
-			ywidth = blockNumWidth+(int)y;
+			ywidth = blockNumHeight+(int)y+renderDistance;
 		} else if(y >= currentLevel.getHeight()) {
+			System.out.println("y2");
 			starty = currentLevel.getHeight()-1;
-			ywidth = 0;
-			return;
+			ywidth = 1;
+			//return;
 		} else {
-			starty = (int)y;
-			ywidth = blockNumHeight;
+			System.out.println("y3");
+			if(y-renderDistance/2 < 0) {
+				System.out.println("y4");
+				starty = 0;
+			} else {
+				System.out.println("y5");
+				System.out.println(y);
+				starty = (int)y-renderDistance/2;
+			}
+			ywidth = blockNumHeight + renderDistance/2;
 		}
+		if(ywidth + starty >= currentLevel.getHeight()) {
+			System.out.println("y6");
+			ywidth = currentLevel.getHeight();
+		}
+		System.out.println("Startx: " + startx);
 		System.out.println(blockNumWidth + " " + blockNumHeight);
 		currentRender = new BufferedImage(xwidth * gameScale, ywidth * gameScale, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D)currentRender.getGraphics();
@@ -212,7 +243,7 @@ public class GameState implements Updatable {
 	public void draw(double time) {
 		g.setColor(currentLevel.backgroundColor);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
-		g.drawImage(currentRender, -(int)(x*gameScale), -(int)(y*gameScale), xwidth*gameScale, ywidth*gameScale, null);
+		g.drawImage(currentRender, -(int)((x-startx)*gameScale), -(int)((y-starty)*gameScale), xwidth*gameScale, ywidth*gameScale, null);
 		//if(p.x > x && p.y > y && p.x < x + currentLevel.getWidth() && p.y < y + currentLevel.getHeight()) {
 		g.drawImage(p.getImage(), (int)((p.x - x) * gameScale), (int)((p.y - y) * gameScale), gameScale, gameScale*2, null);
 			//System.out.println("EXISTS");
@@ -290,6 +321,7 @@ public class GameState implements Updatable {
 			}
 			break;
 		case LEFT:
+			System.out.println("X: " + x + " Y: " + y);
 			x-=scrollingVelocity;
 			if(++scrollTimer >= 50) {
 				scrollTimer = 0;
