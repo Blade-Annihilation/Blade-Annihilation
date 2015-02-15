@@ -45,6 +45,7 @@ public class GameStateManager implements Updatable {
 				if(ms == null) {
 					ms = new MenuState(g, this);
 				}
+				ms.init();
 				prefs = null;
 				ps = null;
 				System.gc();

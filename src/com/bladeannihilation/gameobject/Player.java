@@ -32,30 +32,50 @@ public class Player extends Entity {
 		x = loc.x;
 		y = loc.y;
 		for(int i = 0; i < normAnim.length; i++) {
-			normAnim[i] = norm.getSubimage(i*16, 0, 16, 32);
+			if(normAnim[i] == null) {
+				normAnim[i] = norm.getSubimage(i*16, 0, 16, 32);
+			}
 		}
-		norm.flush();
-		norm = null;
+		if(norm != null) {
+			norm.flush();
+			norm = null;
+		}
 		for(int i = 0; i < upAnim.length; i++) {
-			upAnim[i] = up.getSubimage(i*16, 0, 16, 32);
+			if(upAnim[i] == null) {
+				upAnim[i] = up.getSubimage(i*16, 0, 16, 32);
+			}
 		}
-		up.flush();
-		up = null;
+		if(up != null) {
+			up.flush();
+			up = null;
+		}
 		for(int i = 0; i < downAnim.length; i++) {
-			downAnim[i] = down.getSubimage(i*16, 0, 16, 32);
+			if(downAnim[i] == null) {
+				downAnim[i] = down.getSubimage(i*16, 0, 16, 32);
+			}
 		}
-		down.flush();
-		down = null;
+		if(down != null) {
+			down.flush();
+			down = null;
+		}
 		for(int i = 0; i < leftAnim.length; i++) {
-			leftAnim[i] = left.getSubimage(i*16, 0, 16, 32);
+			if(leftAnim[i] == null) {
+				leftAnim[i] = left.getSubimage(i*16, 0, 16, 32);
+			}
 		}
-		left.flush();
-		left = null;
+		if(left != null) {
+			left.flush();
+			left = null;
+		}
 		for(int i = 0; i < rightAnim.length; i++) {
-			rightAnim[i] = right.getSubimage(i*16, 0, 16, 32);
+			if(rightAnim[i] == null) {
+				rightAnim[i] = right.getSubimage(i*16, 0, 16, 32);
+			}
 		}
-		right.flush();
-		right = null;
+		if(right != null) {
+			right.flush();
+			right = null;
+		}
 	}
 	public enum Movement {
 		CONTINUE,
@@ -148,7 +168,7 @@ public class Player extends Entity {
 				if(l.currentLevel.headTouchesDoor((int)x, (int)y)) {
 					try {
 						l.currentLevel.storeLoc(new Location((int)x, (int)y));
-						l.pushLevel(new Level(l.currentLevel.getFilename(), l.currentLevel.doorID((int)x, (int)y)));
+						l.pushLevel(new Level(l.currentLevel.getFilename(), l.currentLevel.doorID((int)x, (int)y), l));
 						Location s = l.currentLevel.getSpawn();
 						x = s.x;
 						y = s.y-2;

@@ -1,12 +1,13 @@
 package com.bladeannihilation.gameobject;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.awt.Color;
 
 import com.bladeannihilation.main.Resources;
+import com.bladeannihilation.state.TileUpdate;
 
 public class Level {
 	private File f;
@@ -19,10 +20,11 @@ public class Level {
 	protected char sublevelname;
 	protected boolean isSublevel = false;
 	private Location spawn;
-	private Hashtable<String, Character> doors = new Hashtable<String, Character>(); //also contains info block information
+	private HashMap<String, Character> doors = new HashMap<String, Character>(); //also contains info block information
 	private String[] infoArr;
 	private Location storedLoc;
-	public Level(String filename, char sublevelname) throws FileNotFoundException {
+	private TileUpdate tu;
+	public Level(String filename, char sublevelname, TileUpdate tu) throws FileNotFoundException {
 		this.filename = filename;
 		this.sublevelname = sublevelname;
 		isSublevel = true;
@@ -184,6 +186,7 @@ public class Level {
 	}
 	public void replaceTileAt(int x, int y, Tile t) {
 		data[x][y] = t;
+		tu.updateTile(x, y);
 	}
 	public Tile tileAt(int x, int y) {
 		return data[x][y];
@@ -212,7 +215,7 @@ public class Level {
 		return data[x][y] == Tile.DOOR;
 	}
 	public boolean headTouchesInfo(int x, int y) {
-		if(data[x][y] == Tile.INFO) {
+		if(data[x][y] == Tile.INFO || (y < numRows - 1 && data[x][y+1] == Tile.INFO)) {
 			replaceTileAt(x, y, Tile.GRASS);
 			return true;
 		}

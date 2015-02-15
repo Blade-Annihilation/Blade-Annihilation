@@ -7,8 +7,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 
-import javax.swing.text.JTextComponent.KeyBinding;
-
 import com.bladeannihilation.keyboard.KeyBindings;
 import com.bladeannihilation.main.GamePanel;
 import com.bladeannihilation.main.Resources;
@@ -18,7 +16,7 @@ import com.bladeannihilation.gameobject.Level;
 import com.bladeannihilation.gameobject.Location;
 import com.bladeannihilation.gameobject.Player;
 
-public class GameState implements Updatable {
+public class GameState implements Updatable, TileUpdate {
 
 	private Graphics2D g;
 	public Level currentLevel;
@@ -52,6 +50,18 @@ public class GameState implements Updatable {
 		RIGHT,
 		NONE,
 		RETURN
+	}
+	
+	public void dispose() {
+		currentRender.flush();
+		currentRender = null;
+		currentLevel = null;
+		for(int i = 0; i < levelStack.length; i++) {
+			if(levelStack[i] != null) {
+				levelStack[i] = null;
+			}
+		}
+		p = null;
 	}
 
 	public void keyPressed(int key) {
@@ -390,6 +400,11 @@ public class GameState implements Updatable {
 
 	public void infoBlock(int x, int y) {
 		infoText = currentLevel.infoAt(x, y).split("\\!BREAK");
+	}
+
+	@Override
+	public void updateTile(int x, int y) {
+		g.drawImage(Resources.getTileImage(currentLevel.tileAt(x, y)), x*16, y*16, 16, 16, null);
 	}
 
 }

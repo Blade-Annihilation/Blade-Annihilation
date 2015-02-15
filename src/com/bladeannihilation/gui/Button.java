@@ -127,4 +127,11 @@ public class Button {
 	public int getY() {
 		return rect.y;
 	}
+	public void dispose() {
+		System.out.println("Disposing");
+		g.dispose();
+		bi.flush();
+		bi = null;
+		g = null;
+	}
 }

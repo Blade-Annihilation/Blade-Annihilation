@@ -49,6 +49,45 @@ public class Resources {
 		info = getTile("info.png");
 		gameTilesLoaded = true;
 	}
+	public static void disposeGameTiles() {
+		breakable.flush();
+		breakable = null;
+		cobblestone.flush();
+		cobblestone = null;
+		dirt.flush();
+		dirt = null;
+		door.flush();
+		dirt = null;
+		door.flush();
+		door = null;
+		grass.flush();
+		grass = null;
+		roof_top.flush();
+		roof_top = null;
+		roof_left.flush();
+		roof_left = null;
+		roof_right.flush();
+		roof_right = null;
+		roof_center.flush();
+		roof_center = null;
+		tree.flush();
+		tree = null;
+		spawn.flush();
+		spawn = null;
+		return_spawn.flush();
+		return_spawn = null;
+		unknown.flush();
+		unknown = null;
+		wall.flush();
+		wall = null;
+		wall_house.flush();
+		wall_house = null;
+		flooring.flush();
+		flooring = null;
+		info.flush();
+		info = null;
+		gameTilesLoaded = false;
+	}
 	public static BufferedImage getImage(String filename) {
 		File f = new File("resources" + sep + "images" + sep + filename);
 		try {

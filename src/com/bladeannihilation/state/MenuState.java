@@ -18,10 +18,10 @@ public class MenuState implements Updatable {
 	Button quit;
 	Button[] gameStart;
 	int placement = 0;
-	int grassWidth = 50;
-	Color lightGreen = new Color(20, 220, 60);
-	Color darkGreen = new Color(0, 200, 0);
-	BufferedImage logo = Resources.getImage("logo.png");
+	static final int grassWidth = 50;
+	static final Color lightGreen = new Color(20, 220, 60);
+	static final Color darkGreen = new Color(0, 200, 0);
+	static BufferedImage logo;
 	State state = State.MAIN;
 	
 	private enum State {
@@ -32,6 +32,21 @@ public class MenuState implements Updatable {
 	public MenuState(Graphics2D g, GameStateManager gsm) {
 		this.gsm = gsm;
 		this.g = g;
+	}
+	
+	public void init() {
+		if(logo == null) {
+			logo = Resources.getImage("logo.png");
+		}
+		if(begin != null) {
+			begin.dispose();
+		}
+		if(preferences != null) {
+			preferences.dispose();
+		}
+		if(quit != null) {
+			quit.dispose();
+		}
 		int initialY = GamePanel.HEIGHT/2 - 55;
 		begin = new Button(Languages.START, GamePanel.WIDTH/2-125, initialY, 250, 50);
 		preferences = new Button(Languages.PREFERENCES, GamePanel.WIDTH/2-125, initialY+60, 250, 50);
@@ -76,9 +91,12 @@ public class MenuState implements Updatable {
 			gameStart[1].regState();
 			gameStart[2].regState();
 			if(GamePanel.releaseCheck()) {
+				disposeMainButtons();
+				disposeBeginState();
 				GamePanel.gameRunning = true;
 				gsm.initGame();
 				state = State.MAIN;
+				return;
 			}
 		} else if(gameStart[1].testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			gameStart[2].regState();
@@ -88,14 +106,47 @@ public class MenuState implements Updatable {
 		} else if(gameStart[2].testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			if(GamePanel.releaseCheck()) {
 				state = State.MAIN;
-				gameStart = null;
+				disposeBeginState();
 				System.gc();
+				init();
 				return;
 			}
+		} else {
+			GamePanel.releaseCheck();
 		}
 		gameStart[0].draw(g);
 		gameStart[1].draw(g);
 		gameStart[2].draw(g);
+	}
+	
+	public void disposeResources() {
+		disposeMainButtons();
+		disposeBeginState();
+		logo.flush();
+		logo = null;
+	}
+	
+	public void disposeMainButtons() {
+		if(begin != null) {
+			begin.dispose();
+			begin = null;
+		}
+		if(preferences != null) {
+			preferences.dispose();
+			preferences = null;
+		}
+		if(quit != null) {
+			quit.dispose();
+			quit = null;
+		}
+	}
+	
+	public void disposeBeginState() {
+		for(int i = 0; i < gameStart.length; i++) {
+			gameStart[i].dispose();
+			gameStart[i] = null;
+		}
+		gameStart = null;
 	}
 	
 	public void drawMainButtons() {
@@ -104,6 +155,10 @@ public class MenuState implements Updatable {
 			preferences.regState();
 			quit.regState();
 			if(GamePanel.releaseCheck()) {
+				disposeMainButtons();
+				if(gameStart != null) {
+					disposeBeginState();
+				}
 				//if(gameStart == null) {
 					int initialY = GamePanel.HEIGHT/2 - 85;
 					gameStart = new Button[3];
@@ -115,11 +170,14 @@ public class MenuState implements Updatable {
 				//}
 				state = State.BEGIN;
 				//gsm.setState(GameStateManager.State.GAME);
+				return;
 			}
 		} else if(preferences.testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			quit.regState();
 			if(GamePanel.releaseCheck()) {
+				disposeMainButtons();
 				gsm.setState(GameStateManager.State.PREFERENCES);
+				return;
 			}
 		} else if(quit.testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			if(GamePanel.releaseCheck()) {
