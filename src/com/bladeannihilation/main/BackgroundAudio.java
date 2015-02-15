@@ -79,7 +79,7 @@ class BackgroundAudio implements Runnable {
 		}
 	}
 	public void endRun() {
-		System.out.println("Received end run");
+		System.out.println("BG audio: Received end run");
 		contRun = false;
 		if(sdl != null) {
 			sdl.drain();

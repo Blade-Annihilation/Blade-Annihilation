@@ -225,11 +225,20 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 
 	public void initGame() {
 		showLoading();
+		System.out.println("--INITIALIZING GAME--");
 		Audio.setBackgroundMusic("airlock_door_close_old");
 		Resources.loadGameTiles();
 		if(gs == null) {
 			gs = new GameState(g, this); //game state is loaded by this class instead of panel because it needs more speed
 			kh.setGameState(gs);
 		}
+	}
+
+	public void endGameState() {
+		if(gs != null) {
+			gs.dispose();
+			gs = null;
+		}
+		gameRunning = false;
 	}
 }

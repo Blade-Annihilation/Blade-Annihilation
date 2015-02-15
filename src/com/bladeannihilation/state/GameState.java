@@ -61,7 +61,6 @@ public class GameState implements Updatable, TileUpdate {
 				levelStack[i] = null;
 			}
 		}
-		p = null;
 	}
 
 	public void keyPressed(int key) {
@@ -102,6 +101,8 @@ public class GameState implements Updatable, TileUpdate {
 		case KeyBindings.EXIT:
 			gp.gsm.setState(State.MENU);
 			GamePanel.gameRunning = false;
+			gp.endGameState();
+			//gp.initGame();
 			break;
 		case KeyBindings.ZOOM_IN:
 			gameScale++;
@@ -156,19 +157,25 @@ public class GameState implements Updatable, TileUpdate {
 		this.g = g;
 		this.gp = gp;
 		try {
+			System.out.println("Grabbing level...");
 			currentLevel = new Level("tutorial");
 			levelPointer = 0;
 			levelStack[0] = currentLevel;
+			System.out.println("Level grabbed.");
 			Location spawn = currentLevel.getSpawn();
+			System.out.println("Spawn set.");
 			p = new Player(spawn, this);
 			x = spawn.x-GamePanel.WIDTH/(2*gameScale);
 			y = spawn.y-GamePanel.HEIGHT/(2*gameScale);
+			System.out.println("Player loaded.");
 			initRender();
+			System.out.println("Render initialized.");
 		} catch(FileNotFoundException fnfe) {
 			fnfe.printStackTrace();
 			System.out.println("Tutorial not found, shutting down.");
 			System.exit(1);
 		}
+		System.out.println("--GAME INITIALIZED--");
 	}
 	
 	public void initRender() {

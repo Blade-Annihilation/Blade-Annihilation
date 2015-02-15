@@ -16,6 +16,7 @@ public class KeyboardHandler implements KeyListener {
 		this.gs = gs;
 	}
 	public void setGameState(GameState gs) {
+		this.gs = null;
 		this.gs = gs;
 	}
 	public void keyPressed(KeyEvent e) {
