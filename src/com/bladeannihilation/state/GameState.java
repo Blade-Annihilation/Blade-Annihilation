@@ -184,7 +184,7 @@ public class GameState implements Updatable, TileUpdate {
 		}
 		blockNumWidth = GamePanel.WIDTH/gameScale+1;
 		blockNumHeight = GamePanel.HEIGHT/gameScale+1;
-		if(x < 0) {
+		/*if(x < 0) {
 			System.out.println("x1");
 			startx = 0;
 			xwidth = blockNumWidth+(int)x+renderDistance;
@@ -202,12 +202,12 @@ public class GameState implements Updatable, TileUpdate {
 				xwidth = blockNumWidth + renderDistance;
 			} else {
 				System.out.println("x6");
-				xwidth = blockNumWidth + renderDistance/2;
+				xwidth = blockNumWidth + renderDistance;
 			}
 		}
 		if(xwidth + startx >= currentLevel.getWidth()) {
 			System.out.println("x4");
-			xwidth = currentLevel.getWidth();
+			xwidth = currentLevel.getWidth()-startx;
 		}
 		if(y < 0) {
 			System.out.println("y1");
@@ -228,18 +228,119 @@ public class GameState implements Updatable, TileUpdate {
 				System.out.println(y);
 				starty = (int)y-renderDistance/2;
 			}
-			ywidth = blockNumHeight + renderDistance/2;
+			ywidth = blockNumHeight + renderDistance;
 		}
 		if(ywidth + starty >= currentLevel.getHeight()) {
 			System.out.println("y6");
-			ywidth = currentLevel.getHeight();
+			ywidth = currentLevel.getHeight()-starty;
+		}*/
+		startx = (int)x - renderDistance/2;
+		xwidth = (int)x + blockNumWidth + renderDistance/2;
+		/*if(startx < 0) {
+			if(startx + xwidth < 0) {
+				startx = 0;
+				xwidth = 1;
+			} else {
+				xwidth += startx + renderDistance/2;
+				startx = 0;
+				if(xwidth < 1) {
+					xwidth = 1;
+				}
+			}
+			if(xwidth + startx >= currentLevel.getWidth()) {
+				xwidth = (xwidth+startx) - currentLevel.getWidth();
+			}
+			if(xwidth < 1) {
+				xwidth = 1;
+			}
+		} else if(startx >= currentLevel.getWidth()) {
+			startx = currentLevel.getWidth()-1;
+			xwidth = 1;
+		}
+		if(startx + xwidth >= currentLevel.getWidth()) {
+			startx = currentLevel.getWidth()-1-renderDistance-blockNumWidth;
+			xwidth = blockNumWidth + renderDistance;
+		} else {
+			startx = (int)x - renderDistance/2;
+			xwidth = (int)x + blockNumWidth + renderDistance;
+			if(startx + xwidth >= currentLevel.getWidth()) {
+				xwidth = currentLevel.getWidth() - (startx + xwidth) - 100;
+			}
+		}
+		if(startx < 0) {
+			startx = 0;
+		}*/
+		starty = (int)y - renderDistance/2;
+		ywidth = (int)y + blockNumHeight + renderDistance/2;
+		/*if(starty < 0) {
+			if(starty + ywidth < 0) {
+				starty = 0;
+				ywidth = 1;
+			} else {
+				ywidth += starty + renderDistance/2;
+				starty = 0;
+				if(ywidth < 1) {
+					ywidth = 1;
+				}
+			}
+			if(ywidth + starty >= currentLevel.getHeight()) {
+				ywidth = (ywidth+starty) - currentLevel.getHeight();
+			}
+			if(ywidth < 1) {
+				ywidth = 1;
+			}
+		} else if(starty >= currentLevel.getHeight()) {
+			starty = currentLevel.getHeight()-1;
+			ywidth = 1;
+		}
+		if(starty + ywidth >= currentLevel.getHeight()) {
+			starty = currentLevel.getHeight()-1-renderDistance-blockNumHeight;
+			ywidth = blockNumHeight + renderDistance;
+		} else {
+			starty = (int)y - renderDistance/2;
+			ywidth = (int)y + blockNumHeight + renderDistance;
+			if(starty + ywidth >= currentLevel.getHeight()) {
+				ywidth = currentLevel.getHeight() - (starty + ywidth) - 100;
+			}
+		}
+		if(starty < 0) {
+			starty = 0;
+		}*/
+		if(startx < 0) {
+			xwidth -= startx;
+			startx = 0;
+			if(xwidth >= currentLevel.getWidth()) {
+				xwidth = currentLevel.getWidth() - 1;
+			}
+		} else if(startx + xwidth >= currentLevel.getWidth()) {
+			if(startx >= currentLevel.getWidth()) {
+				startx = currentLevel.getWidth()-1;
+				xwidth = 1;
+			} else {
+				xwidth -= (startx + xwidth) - currentLevel.getWidth();
+			}
+		}
+		if(starty < 0) {
+			ywidth -= starty;
+			starty = 0;
+			if(ywidth >= currentLevel.getHeight()) {
+				ywidth = currentLevel.getHeight() - 1;
+			}
+		} else if(starty + ywidth >= currentLevel.getHeight()) {
+			if(starty >= currentLevel.getHeight()) {
+				starty = currentLevel.getHeight()-1;
+				ywidth = 1;
+			} else {
+				ywidth -= (starty + ywidth) - currentLevel.getHeight();
+			}
 		}
 		System.out.println("Startx: " + startx);
 		System.out.println(blockNumWidth + " " + blockNumHeight);
 		currentRender = new BufferedImage(xwidth * gameScale, ywidth * gameScale, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D)currentRender.getGraphics();
-		for(int i = 0; i < xwidth; i++) {
-			for(int o = 0; o < ywidth; o++) {
+		for(int i = startx; i < startx+xwidth; i++) {
+			for(int o = starty; o < starty+ywidth; o++) {
+				//System.out.println(i + " " + o);
 				g.drawImage(Resources.getTileImage(currentLevel.data[i][o]), i*16, o*16, 16, 16, null);
 			}
 		}
@@ -316,6 +417,10 @@ public class GameState implements Updatable, TileUpdate {
 			scrollingVelocity = 1;
 			x = p.x - GamePanel.WIDTH/(2*gameScale);
 			y = p.y - GamePanel.HEIGHT/(2*gameScale);
+			if((x <= startx && x >= 0) || (x + blockNumWidth >= startx + xwidth && x + blockNumWidth < currentLevel.getWidth()) || (y <= starty && y >= 0) || (y + blockNumHeight >= starty + ywidth && y + blockNumHeight < currentLevel.getHeight())) {
+				System.out.println("RE-RENDERING");
+				initRender();
+			}
 			break;
 		case UP:
 			y-=scrollingVelocity;

@@ -25,6 +25,7 @@ public class Level {
 	private Location storedLoc;
 	private TileUpdate tu;
 	public Level(String filename, char sublevelname, TileUpdate tu) throws FileNotFoundException {
+		this.tu = tu;
 		this.filename = filename;
 		this.sublevelname = sublevelname;
 		isSublevel = true;

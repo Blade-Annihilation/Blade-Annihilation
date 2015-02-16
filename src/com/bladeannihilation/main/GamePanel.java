@@ -74,6 +74,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		if(g != null) {
 			g.dispose();
 		}
+		if(gs != null) {
+			gs.initRender();
+		}
 		System.out.println("Display initializing");
 		buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D)buffer.getGraphics();
