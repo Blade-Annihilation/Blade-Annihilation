@@ -12,7 +12,6 @@ import com.bladeannihilation.main.Updatable;
 
 public class MenuState implements Updatable {
 	GameStateManager gsm;
-	Graphics2D g;
 	Button begin;
 	Button preferences;
 	Button quit;
@@ -29,9 +28,8 @@ public class MenuState implements Updatable {
 		BEGIN
 	}
 	
-	public MenuState(Graphics2D g, GameStateManager gsm) {
+	public MenuState(GameStateManager gsm) {
 		this.gsm = gsm;
-		this.g = g;
 	}
 	
 	public void init() {
@@ -56,12 +54,8 @@ public class MenuState implements Updatable {
 	public void setParent(GameStateManager gsm) {
 		this.gsm = gsm;
 	}
-	
-	public void setGraphics(Graphics2D g) {
-		this.g = g;
-	}
 
-	public void draw(double time) {
+	public void draw(double time, Graphics2D g) {
 		if(GamePanel.handleSize()) { //size changed since last frame
 			int initialY = GamePanel.HEIGHT/2 - 55;
 			begin.setLocation(GamePanel.WIDTH/2-125, initialY);
@@ -77,16 +71,16 @@ public class MenuState implements Updatable {
 		}
 		
 		if(state == State.MAIN) {
-			drawMainButtons();
+			drawMainButtons(g);
 		} else if(state == State.BEGIN){ 
-			drawBeginState();
+			drawBeginState(g);
 		}
 		
 		g.setColor(Color.WHITE);
 		//g.drawString("BLADE ANNIHILATION", GamePanel.WIDTH/2, GamePanel.HEIGHT/2-95);
 	}
 	
-	public void drawBeginState() {
+	public void drawBeginState(Graphics2D g) {
 		if(gameStart[0].testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			gameStart[1].regState();
 			gameStart[2].regState();
@@ -149,7 +143,7 @@ public class MenuState implements Updatable {
 		gameStart = null;
 	}
 	
-	public void drawMainButtons() {
+	public void drawMainButtons(Graphics2D g) {
 		//g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		if(begin.testCollision(GamePanel.mouseLocation, GamePanel.mousePressed)) {
 			preferences.regState();

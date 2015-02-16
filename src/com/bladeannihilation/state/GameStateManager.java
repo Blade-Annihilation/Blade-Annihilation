@@ -8,7 +8,6 @@ import com.bladeannihilation.main.Updatable;
 
 public class GameStateManager implements Updatable {
 	private GamePanel gp;
-	private Graphics2D g;
 	private State state;
 	private MenuState ms;
 	private PauseState ps;
@@ -22,19 +21,6 @@ public class GameStateManager implements Updatable {
 		GAME_PREFERENCES
 	}
 	
-	public void setGraphics(Graphics2D g) {
-		this.g = g;
-		if(ms != null) {
-			ms.setGraphics(g);
-		}
-		if(ps != null) {
-			ps.setGraphics(g);
-		}
-		if(prefs != null) {
-			prefs.setGraphics(g);
-		}
-	}
-	
 	public boolean setState(State state) {
 		switch(state) {
 			case GAME:
@@ -43,7 +29,7 @@ public class GameStateManager implements Updatable {
 				break;
 			case MENU:
 				if(ms == null) {
-					ms = new MenuState(g, this);
+					ms = new MenuState(this);
 				}
 				ms.init();
 				prefs = null;
@@ -54,7 +40,7 @@ public class GameStateManager implements Updatable {
 				break;
 			case PAUSE:
 				if(ps == null) {
-					ps = new PauseState(g, this);
+					ps = new PauseState(this);
 				} else {
 					ps.init();
 				}
@@ -63,7 +49,7 @@ public class GameStateManager implements Updatable {
 				break;
 			case PREFERENCES:
 				if(prefs == null) {
-					prefs = new PreferencesState(g, this);
+					prefs = new PreferencesState(this);
 				} else {
 					prefs.init();
 				}
@@ -82,23 +68,23 @@ public class GameStateManager implements Updatable {
 		setState(State.MENU);
 	}
 
-	public void draw(double time) {
+	public void draw(double time, Graphics2D g) {
 		switch(state) {
 			case GAME:
 				break;
 			case GAME_PREFERENCES:
 				break;
 			case MENU:
-				ms.draw(time);
+				ms.draw(time, g);
 				break;
 			case PAUSE:
 				if(ps.progression < ps.progressionMax) {
-					gp.gs.draw(time);
+					gp.gs.draw(time, g);
 				}
-				ps.draw(time);
+				ps.draw(time, g);
 				break;
 			case PREFERENCES:
-				prefs.draw(time);
+				prefs.draw(time, g);
 				break;
 			default:
 				break;

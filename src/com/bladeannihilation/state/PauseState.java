@@ -9,14 +9,12 @@ import com.bladeannihilation.main.Languages;
 import com.bladeannihilation.main.Updatable;
 
 public class PauseState implements Updatable {
-	private Graphics2D g;
 	//private GamePanel gp;
 	private Color black = new Color(0, 0, 0);
 	protected final float progressionMax = 25;
 	protected byte progression = 0;
 	
-	public PauseState(Graphics2D g, GameStateManager gameStateManager) {
-		this.g = g;
+	public PauseState(GameStateManager gameStateManager) {
 		//this.gp = gp;
 	}
 	
@@ -25,7 +23,7 @@ public class PauseState implements Updatable {
 	}
 	
 	@Override
-	public void draw(double time) {
+	public void draw(double time, Graphics2D g) {
 		if(progression < progressionMax) {
 			g.setColor(black);
 			g.fillRect(0, 0, GamePanel.WIDTH, (int)(GamePanel.HEIGHT*(((float)progression)/progressionMax)));
@@ -48,9 +46,5 @@ public class PauseState implements Updatable {
 		if(keyCode == KeyBindings.PAUSE) {
 			GamePanel.gameRunning = true;
 		}
-	}
-
-	public void setGraphics(Graphics2D g) {
-		this.g = g;
 	}
 }

@@ -18,7 +18,6 @@ import com.bladeannihilation.gameobject.Player;
 
 public class GameState implements Updatable, TileUpdate {
 
-	private Graphics2D g;
 	public Level currentLevel;
 	public ScrollingState scrollingState = ScrollingState.FOLLOW_PLAYER;
 	private float scrollingVelocity = 1;
@@ -85,8 +84,8 @@ public class GameState implements Updatable, TileUpdate {
 			if(infoText != null) {
 				if(infoProgression < infoText.length - 1) {
 					infoProgression++;
-					FontMetrics fm = g.getFontMetrics();
-					Rectangle2D r = fm.getStringBounds(infoText[infoProgression], g);
+					FontMetrics fm = gp.getCurrentGraphics().getFontMetrics();
+					Rectangle2D r = fm.getStringBounds(infoText[infoProgression], gp.getCurrentGraphics());
 					int x = (GamePanel.WIDTH - 60 - (int) r.getWidth()) / 2;
 					int y = (120 - (int) r.getHeight()) / 2 + fm.getAscent();
 					infoPlacement[0] = x;
@@ -150,11 +149,10 @@ public class GameState implements Updatable, TileUpdate {
 		initRender();
 	}
 
-	public GameState(Graphics2D g, GamePanel gp) {
+	public GameState(GamePanel gp) {
 		infoText = new String[2];
 		infoText[0] = "Welcome to Blade Annihilation! Press " + ((char)KeyBindings.UP) + " to continue.";
 		infoText[1] = "Use " + ((char)KeyBindings.UP) + ((char)KeyBindings.DOWN) + ((char)KeyBindings.LEFT) + ((char)KeyBindings.RIGHT) + " to move, and " + ((char)KeyBindings.SCROLL_UP) + ((char)KeyBindings.SCROLL_DOWN) + ((char)KeyBindings.SCROLL_LEFT) + ((char)KeyBindings.SCROLL_RIGHT) + " to move the camera. Find blue info blocks for text.";
-		this.g = g;
 		this.gp = gp;
 		try {
 			System.out.println("Grabbing level...");
@@ -252,12 +250,8 @@ public class GameState implements Updatable, TileUpdate {
 		
 	}
 
-	public void setGraphics(Graphics2D g) {
-		this.g = g;
-	}
-
 	@Override
-	public void draw(double time) {
+	public void draw(double time, Graphics2D g) {
 		g.setColor(currentLevel.backgroundColor);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		g.drawImage(currentRender, -(int)((x-startx)*gameScale), -(int)((y-starty)*gameScale), xwidth*gameScale, ywidth*gameScale, null);
@@ -411,7 +405,7 @@ public class GameState implements Updatable, TileUpdate {
 
 	@Override
 	public void updateTile(int x, int y) {
-		g.drawImage(Resources.getTileImage(currentLevel.tileAt(x, y)), x*16, y*16, 16, 16, null);
+		gp.getCurrentGraphics().drawImage(Resources.getTileImage(currentLevel.tileAt(x, y)), x*16, y*16, 16, 16, null);
 	}
 
 }

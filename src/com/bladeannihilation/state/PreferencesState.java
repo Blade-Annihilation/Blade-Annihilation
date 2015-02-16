@@ -10,17 +10,15 @@ import com.bladeannihilation.main.Languages;
 import com.bladeannihilation.main.Updatable;
 
 public class PreferencesState implements Updatable {
-	private Graphics2D g;
 	private GameStateManager gsm;
 	private boolean pressWaiting = false;
 	
-	public PreferencesState(Graphics2D g, GameStateManager gsm) {
-		this.g = g;
+	public PreferencesState(GameStateManager gsm) {
 		this.gsm = gsm;
 	}
 	
 	@Override
-	public void draw(double time) {
+	public void draw(double time, Graphics2D g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		
@@ -53,10 +51,6 @@ public class PreferencesState implements Updatable {
 			}
 			gsm.setState(GameStateManager.State.MENU);
 		}
-	}
-
-	public void setGraphics(Graphics2D g) {
-		this.g = g;
 	}
 
 	public void init() {

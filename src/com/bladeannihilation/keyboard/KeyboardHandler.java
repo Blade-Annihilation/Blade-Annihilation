@@ -24,9 +24,13 @@ public class KeyboardHandler implements KeyListener {
 			KeyBindings.keysPressed[e.getKeyCode()] = true;
 		}
 		if(GamePanel.gameRunning) {
-			gs.keyPressed(e.getKeyCode());
+			if(gs != null) {
+				gs.keyPressed(e.getKeyCode());
+			}
 		} else {
-			gsm.keyPressed(e.getKeyCode());
+			if(gsm != null) {
+				gsm.keyPressed(e.getKeyCode());
+			}
 		}
 	}
 	public void keyReleased(KeyEvent e) {
@@ -34,9 +38,13 @@ public class KeyboardHandler implements KeyListener {
 			KeyBindings.keysPressed[e.getKeyCode()] = false;
 		}
 		if(GamePanel.gameRunning) {
-			gs.keyReleased(e.getKeyCode());
+			if(gs != null) {
+				gs.keyReleased(e.getKeyCode());
+			}
 		} else {
-			gsm.keyReleased(e.getKeyCode());
+			if(gsm != null) {
+				gsm.keyReleased(e.getKeyCode());
+			}
 		}
 	}
 	public void keyTyped(KeyEvent e) {}

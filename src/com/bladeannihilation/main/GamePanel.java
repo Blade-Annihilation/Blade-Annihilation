@@ -49,6 +49,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private Graphics2D g;
 	private Graphics videoMem;
 	public GameStateManager gsm;
+	
+	public Graphics2D getCurrentGraphics() {
+		return g;
+	}
 
 	public GamePanel(int width, int height) {
 		GamePanel.WIDTH = width;
@@ -57,29 +61,34 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		setFocusable(true);
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		gsm = new GameStateManager(this);
 		addKeyListener((kh = new KeyboardHandler(gsm, null)));
 		requestFocusInWindow();
+		gsm = new GameStateManager(this);
 	}
 
 	public void initDisplay() {
+		if(buffer != null) {
+			buffer.flush();
+			buffer = null;
+		}
+		if(g != null) {
+			g.dispose();
+		}
 		System.out.println("Display initializing");
 		buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D)buffer.getGraphics();
 		g.setFont(gameFont);
-		gsm.setGraphics(g);
 		videoMem = getGraphics();
-		if(gs != null) {
-			gs.setGraphics(g);
-		}
+		System.out.println(g + " " + buffer);
 		showLoading();
 	}
 
 	public void beginRun() {
 		if(thread == null) {
 			running = true;
-			thread = new Thread(this);
-			thread.start();
+			//thread = new Thread(this);
+			//thread.start();
+			run();
 		}
 	}
 	
@@ -134,9 +143,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 
 			//draw code
 			if(gameRunning) {
-				gs.draw(lag/msPerTick);
+				gs.draw(lag/msPerTick, g);
 			} else {
-				gsm.draw(lag/msPerTick);
+				gsm.draw(lag/msPerTick, g);
 			}
 			g.drawString("FPS: " + currentFPS, 5, 15);
 			if(second >= 1000) {
@@ -229,7 +238,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		Audio.setBackgroundMusic("airlock_door_close_old");
 		Resources.loadGameTiles();
 		if(gs == null) {
-			gs = new GameState(g, this); //game state is loaded by this class instead of panel because it needs more speed
+			gs = new GameState(this); //game state is loaded by this class instead of panel because it needs more speed
 			kh.setGameState(gs);
 		}
 	}
