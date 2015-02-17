@@ -20,7 +20,7 @@ public class GameState implements Updatable, TileUpdate {
 
 	public Level currentLevel;
 	public ScrollingState scrollingState = ScrollingState.FOLLOW_PLAYER;
-	private float scrollingVelocity = 2;
+	private float scrollingVelocity = 4;
 	private double x = 0;
 	private double y = 0;
 	private byte scrollTimer = 0;
@@ -327,9 +327,9 @@ public class GameState implements Updatable, TileUpdate {
 			if(ywidth >= currentLevel.getHeight()) {
 				ywidth = currentLevel.getHeight() - 1;
 			}
-		} else if(starty + ywidth >= currentLevel.getHeight()) {
+		} else if(starty + ywidth > currentLevel.getHeight()) {
 			if(starty >= currentLevel.getHeight()) {
-				starty = currentLevel.getHeight()-1;
+				starty = currentLevel.getHeight();
 				ywidth = 1;
 			} else {
 				ywidth -= (starty + ywidth) - currentLevel.getHeight();
@@ -398,11 +398,11 @@ public class GameState implements Updatable, TileUpdate {
 		}
 		scrollingState = ScrollingState.RETURN;
 		float totalDistance = (float) Math.sqrt(Math.pow(x - desiredx, 2) + Math.pow(y - desiredy, 2)); //pythagorean theorem!
-		totalDistance/=1000; //now pretend it's name has changed because it represents speed
+		totalDistance/=500; //now pretend its name has changed because it represents speed
 		totalDistance*=gameScale;
 		System.out.println("Pre-scrolling velocity: " + totalDistance);
-		if(totalDistance < 0.35f) { //make sure it can't go too slow
-			totalDistance = 0.35f;
+		if(totalDistance < 0.5f) { //make sure it can't go too slow
+			totalDistance = 0.5f;
 		}
 		scrollingVelocity = totalDistance;
 		System.out.println("Scrolling velocity: " + scrollingVelocity);
@@ -461,7 +461,7 @@ public class GameState implements Updatable, TileUpdate {
 			double desiredy = p.y - GamePanel.HEIGHT/(2*gameScale);
 			if(x == desiredx && y == desiredy) {
 				scrollingState = ScrollingState.FOLLOW_PLAYER;
-				scrollingVelocity = 2;
+				scrollingVelocity = 4;
 			} else {
 				if(x < desiredx) {
 					x += scrollingVelocity;
@@ -469,7 +469,7 @@ public class GameState implements Updatable, TileUpdate {
 						x = desiredx;
 						if(y == desiredy) {
 							scrollingState = ScrollingState.FOLLOW_PLAYER;
-							scrollingVelocity = 2;
+							scrollingVelocity = 4;
 						}
 					}
 				} else if(x > desiredx) {
@@ -478,7 +478,7 @@ public class GameState implements Updatable, TileUpdate {
 						x = desiredx;
 						if(y == desiredy) {
 							scrollingState = ScrollingState.FOLLOW_PLAYER;
-							scrollingVelocity = 2;
+							scrollingVelocity = 4;
 						}
 					}
 				}
@@ -488,7 +488,7 @@ public class GameState implements Updatable, TileUpdate {
 						y = desiredy;
 						if(x == desiredx) {
 							scrollingState = ScrollingState.FOLLOW_PLAYER;
-							scrollingVelocity = 2;
+							scrollingVelocity = 4;
 						}
 					}
 				} else if(y < desiredy) {
@@ -497,7 +497,7 @@ public class GameState implements Updatable, TileUpdate {
 						y = desiredy;
 						if(x == desiredx) {
 							scrollingState = ScrollingState.FOLLOW_PLAYER;
-							scrollingVelocity = 2;
+							scrollingVelocity = 4;
 						}
 					}
 				}
