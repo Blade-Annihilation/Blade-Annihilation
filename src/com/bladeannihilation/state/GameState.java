@@ -40,8 +40,6 @@ public class GameState implements Updatable, TileUpdate {
 	private int starty;
 	private int xwidth;
 	private int ywidth;
-	private int renderOffsetX = 0;
-	private int renderOffsetY = 0;
 	private boolean updateRequired;
 	public double xSpeed = 0; //used for rendering only
 	public double ySpeed = 0;
@@ -355,14 +353,12 @@ public class GameState implements Updatable, TileUpdate {
 			}
 		}*/
 		if(startx < 0) {
-			renderOffsetX = 0;
 			startx = 0;
 		}
 		if(startx + xwidth > currentLevel.getWidth()) {
 			if(startx >= currentLevel.getWidth()) {
 				startx = currentLevel.getWidth()-1;
 				xwidth = 1;
-				renderOffsetX = startx - currentLevel.getWidth();
 			} else {
 				startx -= (startx + xwidth) - currentLevel.getWidth();
 				if(startx < 0) {
@@ -372,14 +368,12 @@ public class GameState implements Updatable, TileUpdate {
 			}
 		}
 		if(starty < 0) {
-			renderOffsetY = 0;
 			starty = 0;
 		}
 		if(starty + ywidth > currentLevel.getHeight()) {
 			if(starty >= currentLevel.getHeight()) {
 				starty = currentLevel.getHeight()-1;
 				ywidth = 1;
-				renderOffsetY = starty - currentLevel.getHeight();
 			} else {
 				starty -= (starty + ywidth) - currentLevel.getHeight();
 				if(starty < 0) {
@@ -413,7 +407,7 @@ public class GameState implements Updatable, TileUpdate {
 		}
 		g.setColor(currentLevel.backgroundColor);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
-		g.drawImage(currentRender, -(int)((x-startx+renderOffsetX+(xSpeed*time))*gameScale), -(int)((y-starty+renderOffsetY+(ySpeed*time))*gameScale), xwidth*gameScale, ywidth*gameScale, null);
+		g.drawImage(currentRender, -(int)((x-startx+(xSpeed*time))*gameScale), -(int)((y-starty+(ySpeed*time))*gameScale), xwidth*gameScale, ywidth*gameScale, null);
 		//if(p.x > x && p.y > y && p.x < x + currentLevel.getWidth() && p.y < y + currentLevel.getHeight()) {
 		g.drawImage(p.getImage(), (int)((p.x - x) * gameScale), (int)((p.y - y) * gameScale), gameScale, gameScale*2, null);
 			//System.out.println("EXISTS");
