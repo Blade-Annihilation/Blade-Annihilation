@@ -23,7 +23,9 @@ public class Player extends Entity {
 	public static BufferedImage[] downAnim = new BufferedImage[4];
 	public static BufferedImage[] leftAnim = new BufferedImage[4];
 	public static BufferedImage[] rightAnim = new BufferedImage[4];
-	public static final double movementDelta = 0.2;
+	public static final double movementDelta = 0.4;
+	public double xSpeed = 0; //used for rendering only
+	public double ySpeed = 0;
 	private GameState l;
 	private byte animPlacement = 0;
 	private byte animTimer = 0;
@@ -97,8 +99,12 @@ public class Player extends Entity {
 		if(KeyBindings.keysPressed[KeyBindings.LEFT]) {
 			if(l.currentLevel.movable((int)(x-movementDelta), (int)y) && l.currentLevel.movable((int)(x-movementDelta), (int)(y+1)) && ((int)y == y ? true : l.currentLevel.movable((int)(x-movementDelta), (int)(y+2)))) {
 				x-=movementDelta;
+				xSpeed = -movementDelta;
 			} else if(x > (int)(x-movementDelta+1)) {
 				x = (int)(x-movementDelta+1);
+				xSpeed = 0;
+			} else {
+				xSpeed = 0;
 			}
 			xState = Movement.RETURN;
 			if(!l.isFollowingPlayer()) {
@@ -113,11 +119,16 @@ public class Player extends Entity {
 		} else if(KeyBindings.keysPressed[KeyBindings.RIGHT]) {
 			if(l.currentLevel.movable((int)(x+1+movementDelta), (int)y) && l.currentLevel.movable((int)(x+1+movementDelta), (int)(y+1)) && ((int)y == y ? true : l.currentLevel.movable((int)(x+1+movementDelta), (int)(y+2)))) {
 				x+=movementDelta;
+				xSpeed = movementDelta;
 				if(x+1 >= l.currentLevel.getWidth()) {
 					x = l.currentLevel.getWidth()-1-movementDelta;
+					xSpeed = 0;
 				}
 			} else if(x < (int)(x+movementDelta)) {
 				x = (int)(x+movementDelta);
+				xSpeed = 0;
+			} else {
+				xSpeed = 0;
 			}
 			xState = Movement.CONTINUE;
 			if(!l.isFollowingPlayer()) {
@@ -131,12 +142,17 @@ public class Player extends Entity {
 			}
 		} else {
 			xState = Movement.NORM;
+			xSpeed = 0;
 		}
 		if(KeyBindings.keysPressed[KeyBindings.DOWN]) {
 			if(l.currentLevel.movable((int)x, (int)(y+2+movementDelta)) && ((int)x == x ? true : l.currentLevel.movable((int)(x+1), (int)(y+2+movementDelta)))) {
 				y+=movementDelta;
+				ySpeed = movementDelta;
 			} else if(y < (int)(y+2+movementDelta)) {
 				y = (int)(y+movementDelta);
+				ySpeed = 0;
+			} else {
+				ySpeed = 0;
 			}
 			yState = Movement.CONTINUE;
 			if(!l.isFollowingPlayer()) {
@@ -157,8 +173,12 @@ public class Player extends Entity {
 		} else if(KeyBindings.keysPressed[KeyBindings.UP]) {
 			if(l.currentLevel.movable((int)x, (int)(y-movementDelta)) && ((int)x == x ? true : l.currentLevel.movable((int)(x+1), (int)(y-movementDelta)))) {
 				y-=movementDelta;
+				ySpeed = -movementDelta;
 			} else if(y > (int)y) {
 				y = (int)y;
+				ySpeed = 0;
+			} else {
+				ySpeed = 0;
 			}
 			yState = Movement.RETURN;
 			if(!l.isFollowingPlayer()) {
@@ -184,6 +204,7 @@ public class Player extends Entity {
 			}
 		} else {
 			yState = Movement.NORM;
+			ySpeed = 0;
 		}
 	}
 	@SuppressWarnings("incomplete-switch")

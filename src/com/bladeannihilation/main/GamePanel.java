@@ -37,7 +37,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private int maxFPS = 60;
 	private double targetTimeDouble = 1000.0/maxFPS;
 	private int msPerFrame = (int)targetTimeDouble;
-	private final int msPerTick = 16; //1/20th of a second just kidding 1/60th
+	private final int msPerTick = 50; //1/20th of a second just kidding 1/60th just kidding 1/20th
 	private boolean limitFPS = true;
 	private int currentFPS = 0;
 	private int second = 0; //stores time elapsed in current second

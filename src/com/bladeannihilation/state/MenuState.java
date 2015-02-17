@@ -20,6 +20,7 @@ public class MenuState implements Updatable {
 	static final int grassWidth = 50;
 	static final Color lightGreen = new Color(20, 220, 60);
 	static final Color darkGreen = new Color(0, 200, 0);
+	static final byte incrementFactor = 2; //amount by which columns move
 	static BufferedImage logo;
 	State state = State.MAIN;
 	
@@ -67,7 +68,7 @@ public class MenuState implements Updatable {
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		g.setColor(darkGreen);
 		for(int i = -grassWidth; i < GamePanel.WIDTH/(double)grassWidth; i+=2) {
-			g.fillRect(i*grassWidth + placement, 0, grassWidth, GamePanel.HEIGHT);
+			g.fillRect(i*grassWidth + placement + (int)(incrementFactor * time), 0, grassWidth, GamePanel.HEIGHT);
 		}
 		
 		if(state == State.MAIN) {
@@ -188,7 +189,7 @@ public class MenuState implements Updatable {
 
 	@Override
 	public void update() {
-		if(++placement >= grassWidth*2) placement = 0;
+		if((placement+=incrementFactor) >= grassWidth*2) placement = 0;
 	}
 	
 }

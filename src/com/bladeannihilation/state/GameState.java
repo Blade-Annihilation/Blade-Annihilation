@@ -20,7 +20,7 @@ public class GameState implements Updatable, TileUpdate {
 
 	public Level currentLevel;
 	public ScrollingState scrollingState = ScrollingState.FOLLOW_PLAYER;
-	private float scrollingVelocity = 1;
+	private float scrollingVelocity = 2;
 	private double x = 0;
 	private double y = 0;
 	private byte scrollTimer = 0;
@@ -40,6 +40,7 @@ public class GameState implements Updatable, TileUpdate {
 	private int starty;
 	private int xwidth;
 	private int ywidth;
+	private boolean updateRequired;
 
 	public enum ScrollingState {
 		FOLLOW_PLAYER,
@@ -121,7 +122,7 @@ public class GameState implements Updatable, TileUpdate {
 		case KeyBindings.SCROLL_LEFT:
 		case KeyBindings.SCROLL_RIGHT:
 			scrollingState = ScrollingState.NONE;
-			scrollingVelocity = 1;
+			scrollingVelocity = 2;
 			break;
 		}
 	}
@@ -353,9 +354,13 @@ public class GameState implements Updatable, TileUpdate {
 
 	@Override
 	public void draw(double time, Graphics2D g) {
+		if(updateRequired) {
+			initRender();
+			updateRequired = false;
+		}
 		g.setColor(currentLevel.backgroundColor);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
-		g.drawImage(currentRender, -(int)((x-startx)*gameScale), -(int)((y-starty)*gameScale), xwidth*gameScale, ywidth*gameScale, null);
+		g.drawImage(currentRender, -(int)((x-startx+(p.xSpeed*time))*gameScale), -(int)((y-starty+(p.ySpeed*time))*gameScale), xwidth*gameScale, ywidth*gameScale, null);
 		//if(p.x > x && p.y > y && p.x < x + currentLevel.getWidth() && p.y < y + currentLevel.getHeight()) {
 		g.drawImage(p.getImage(), (int)((p.x - x) * gameScale), (int)((p.y - y) * gameScale), gameScale, gameScale*2, null);
 			//System.out.println("EXISTS");
@@ -414,12 +419,12 @@ public class GameState implements Updatable, TileUpdate {
 		}
 		switch(scrollingState) {
 		case FOLLOW_PLAYER:
-			scrollingVelocity = 1;
+			scrollingVelocity = 2;
 			x = p.x - GamePanel.WIDTH/(2*gameScale);
 			y = p.y - GamePanel.HEIGHT/(2*gameScale);
 			if((x <= startx && x >= 0) || (x + blockNumWidth >= startx + xwidth && x + blockNumWidth < currentLevel.getWidth()) || (y <= starty && y >= 0) || (y + blockNumHeight >= starty + ywidth && y + blockNumHeight < currentLevel.getHeight())) {
 				System.out.println("RE-RENDERING");
-				initRender();
+				updateRequired = true;
 			}
 			break;
 		case UP:
@@ -456,7 +461,7 @@ public class GameState implements Updatable, TileUpdate {
 			double desiredy = p.y - GamePanel.HEIGHT/(2*gameScale);
 			if(x == desiredx && y == desiredy) {
 				scrollingState = ScrollingState.FOLLOW_PLAYER;
-				scrollingVelocity = 1;
+				scrollingVelocity = 2;
 			} else {
 				if(x < desiredx) {
 					x += scrollingVelocity;
@@ -464,7 +469,7 @@ public class GameState implements Updatable, TileUpdate {
 						x = desiredx;
 						if(y == desiredy) {
 							scrollingState = ScrollingState.FOLLOW_PLAYER;
-							scrollingVelocity = 1;
+							scrollingVelocity = 2;
 						}
 					}
 				} else if(x > desiredx) {
@@ -473,7 +478,7 @@ public class GameState implements Updatable, TileUpdate {
 						x = desiredx;
 						if(y == desiredy) {
 							scrollingState = ScrollingState.FOLLOW_PLAYER;
-							scrollingVelocity = 1;
+							scrollingVelocity = 2;
 						}
 					}
 				}
@@ -483,7 +488,7 @@ public class GameState implements Updatable, TileUpdate {
 						y = desiredy;
 						if(x == desiredx) {
 							scrollingState = ScrollingState.FOLLOW_PLAYER;
-							scrollingVelocity = 1;
+							scrollingVelocity = 2;
 						}
 					}
 				} else if(y < desiredy) {
@@ -492,7 +497,7 @@ public class GameState implements Updatable, TileUpdate {
 						y = desiredy;
 						if(x == desiredx) {
 							scrollingState = ScrollingState.FOLLOW_PLAYER;
-							scrollingVelocity = 1;
+							scrollingVelocity = 2;
 						}
 					}
 				}
@@ -500,7 +505,7 @@ public class GameState implements Updatable, TileUpdate {
 		default:
 			break;
 		}
-		
+
 		p.update();
 	}
 
